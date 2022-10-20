@@ -42,7 +42,7 @@ describe('Journal', function () {
 
       expect(countBeforeUpload).to.equal(0);
 
-      await journal.uploadOutput('path', 1, 'type', 'name');
+      await journal.uploadOutput('path', 1, 'type', 'name', "sdjakdfhsdfx102-293");
 
       const countAfterUpload = await journal.fileCount();
 

@@ -5,7 +5,7 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 
 contract Journal {
-    string public name = "Persssist";
+    string public name = 'Persssist';
     uint256 public fileCount = 0;
 
     // this mapping behaves as a "catalog"
@@ -19,6 +19,7 @@ contract Journal {
         uint256 fileSize;
         string fileType;
         string fileName;
+        string fileHash;
         address payable uploader;
     }
 
@@ -39,7 +40,8 @@ contract Journal {
         string memory _filePath,
         uint256 _fileSize,
         string memory _fileType,
-        string memory _fileName
+        string memory _fileName,
+        string memory _fileHash
     ) public {
         require(bytes(_filePath).length > 0);
         require(bytes(_fileType).length > 0);
@@ -59,6 +61,7 @@ contract Journal {
             _fileSize,
             _fileType,
             _fileName,
+            _fileHash,
             payable(msg.sender)
         );
 
@@ -74,4 +77,8 @@ contract Journal {
             payable(msg.sender)
         );
     }
+
+    // function editOutput
+
+    // function addNewOutputVersion
 }
