@@ -46,6 +46,16 @@ export async function uploadOutput() {
   }
 }
 
+function convertOutputDetailsArrayToObject(outputDetailsArray: any[]) {
+  return {
+    filePath: outputDetailsArray[0],
+    fileCount: outputDetailsArray[1],
+    abstract: outputDetailsArray[2],
+    title: outputDetailsArray[3],
+    hash: outputDetailsArray[4]
+  };
+}
+
 // TODO - instead of a simple count, should we be using something else?
 export async function getOutputDetailsByFileNumber(fileNumber: number) {
   if (typeof window.ethereum !== 'undefined') {
@@ -60,8 +70,9 @@ export async function getOutputDetailsByFileNumber(fileNumber: number) {
     //try to get the greeting in the contract
     try {
       const output = await contract.getOutputByFileNumber(fileNumber);
-
       console.log({ output });
+
+      return convertOutputDetailsArrayToObject(output);
     } catch (e) {
       console.log('Err: ', e);
     }

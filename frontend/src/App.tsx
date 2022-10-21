@@ -1,5 +1,4 @@
-import { ethers } from 'ethers';
-
+import { useState } from 'react';
 import {
   getTotalUploadedOutputsCount,
   incrementFileCountForTesting,
@@ -9,6 +8,14 @@ import {
 } from './lib';
 
 function App() {
+  const [outputDetails, setOutputDetails] = useState<any>(null);
+
+  const handleClickReadOutput = async () => {
+    const outputDetails = await getOutputDetailsByFileNumber(1);
+    console.log({ outputDetails });
+    setOutputDetails(outputDetails);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -21,10 +28,18 @@ function App() {
           Increment journal count
         </button>
         <button onClick={uploadOutput}>Upload sample abstract</button>
-        <button onClick={() => getOutputDetailsByFileNumber(1)}>
-          Read sample abstract
-        </button>
+        <button onClick={handleClickReadOutput}>Read sample abstract</button>
       </header>
+
+      <div>
+        {outputDetails && (
+          <div>
+            <p>Output details</p>
+            <p>File hash: {outputDetails.hash}</p>
+            <p>File type: {outputDetails.title}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
