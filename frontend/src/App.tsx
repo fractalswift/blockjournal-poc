@@ -4,22 +4,11 @@ import {
   getTotalUploadedOutputsCount,
   incrementFileCountForTesting,
   uploadOutput,
-  getOutputDetailsByFileNumber
+  getOutputDetailsByFileNumber,
+  connectToMetamask
 } from './lib';
 
 function App() {
-  const connectToMetamask = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const accounts = await provider.send('eth_requestAccounts', []);
-    const signer = provider.getSigner();
-
-    const address = await signer.getAddress();
-    const balance = await provider.getBalance(address);
-    const formattedBalance = ethers.utils.formatEther(balance);
-
-    console.log({ address, balance, formattedBalance, accounts });
-  };
-
   return (
     <div className="App">
       <header className="App-header">
