@@ -1,6 +1,9 @@
 import { ethers } from 'ethers';
 
-import { getABI } from './lib';
+import {
+  getTotalUploadedOutputsCount,
+  incrementFileCountForTesting
+} from './lib';
 
 function App() {
   const connectToMetamask = async () => {
@@ -20,6 +23,12 @@ function App() {
       <header className="App-header">
         <p>BlockJournal POC</p>
         <button onClick={connectToMetamask}>Connect to metamask</button>
+        <button onClick={getTotalUploadedOutputsCount}>
+          Get journal count
+        </button>
+        <button onClick={incrementFileCountForTesting}>
+          Increment journal count
+        </button>
       </header>
     </div>
   );

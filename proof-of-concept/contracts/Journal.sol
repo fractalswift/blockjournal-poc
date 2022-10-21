@@ -5,8 +5,18 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 
 contract Journal {
-    string public name = 'Persssist';
+    string public name = 'Blockchain Journal';
     uint256 public fileCount = 0;
+
+    // TODO - delete, for testing only
+    function incrementFileCountForTesting() public {
+        fileCount++;
+    }
+
+    // TODO - delete, for testing only
+    function decrementFileCountForTesting() public {
+        fileCount--;
+    }
 
     // this mapping behaves as a "catalog"
     // of files uploaded to the storage, we declare
