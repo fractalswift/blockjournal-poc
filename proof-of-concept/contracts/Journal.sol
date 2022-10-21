@@ -53,6 +53,7 @@ contract Journal {
         string memory _fileName,
         string memory _fileHash
     ) public {
+        // TODO probably some requirement for file hash
         require(bytes(_filePath).length > 0);
         require(bytes(_fileType).length > 0);
         require(bytes(_fileName).length > 0);
@@ -85,6 +86,31 @@ contract Journal {
             _fileType,
             _fileName,
             payable(msg.sender)
+        );
+    }
+
+    function getOutputByFileNumber(uint256 _fileNumber)
+        public
+        view
+        returns (
+            uint256,
+            string memory,
+            uint256,
+            string memory,
+            string memory,
+            string memory,
+            address payable
+        )
+    {
+        Output memory output = files[_fileNumber];
+        return (
+            output.fileId,
+            output.filePath,
+            output.fileSize,
+            output.fileType,
+            output.fileName,
+            output.fileHash,
+            output.uploader
         );
     }
 

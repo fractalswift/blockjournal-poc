@@ -2,7 +2,9 @@ import { ethers } from 'ethers';
 
 import {
   getTotalUploadedOutputsCount,
-  incrementFileCountForTesting
+  incrementFileCountForTesting,
+  uploadOutput,
+  getOutputDetailsByFileNumber
 } from './lib';
 
 function App() {
@@ -28,6 +30,10 @@ function App() {
         </button>
         <button onClick={incrementFileCountForTesting}>
           Increment journal count
+        </button>
+        <button onClick={uploadOutput}>Upload sample abstract</button>
+        <button onClick={() => getOutputDetailsByFileNumber(1)}>
+          Read sample abstract
         </button>
       </header>
     </div>
