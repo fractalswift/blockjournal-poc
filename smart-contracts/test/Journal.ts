@@ -42,11 +42,31 @@ describe('Journal', function () {
 
       expect(countBeforeUpload).to.equal(0);
 
-      await journal.uploadOutput('path', 'sdjakdfhsdfx102-293');
+      await journal.uploadOutput('path', 'sdjakdfhsdfx102-293', true);
 
       const countAfterUpload = await journal.outputCount();
 
       expect(countAfterUpload).to.equal(1);
+    });
+
+    it('Should allow any address to read the published output', async function () {
+      const { owner, otherAccount, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      await journal.uploadOutput(
+        'fake-path-to-uploaded-output',
+        'sdjakdfhsdfx102-293',
+        true
+      );
+
+      const article = await journal.getOutputByFileNumber(1);
+
+      article.forEach((item) => console.log(item));
+
+      expect(article).to.contain('fake-path-to-uploaded-output');
+      expect(article).to.contain('sdjakdfhsdfx102-293');
+      expect(article).to.contain(true);
     });
   });
 });

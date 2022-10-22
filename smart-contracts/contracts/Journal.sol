@@ -19,6 +19,7 @@ contract Journal {
         uint256 outputIdNumber;
         string outputPath;
         string outputHash;
+        bool isPublished;
         address payable uploader;
     }
 
@@ -26,6 +27,7 @@ contract Journal {
         uint256 outputIdNumber,
         string outputPath,
         string outputHash,
+        bool isPublished,
         address payable uploader
     );
 
@@ -33,10 +35,12 @@ contract Journal {
     // to the smart contract outputs
     // mapping in order to persist
     // the information.
-    function uploadOutput(string memory _outputPath, string memory _outputHash)
-        public
-    {
-        // TODO probably some requirement for output hash
+    function uploadOutput(
+        string memory _outputPath,
+        string memory _outputHash,
+        bool _isPublished
+    ) public {
+        // TODO probably some requirement for isPublished
         require(bytes(_outputPath).length > 0);
         require(bytes(_outputHash).length > 0);
         require(msg.sender != address(0));
@@ -47,6 +51,7 @@ contract Journal {
             outputCount,
             _outputPath,
             _outputHash,
+            _isPublished,
             payable(msg.sender)
         );
 
@@ -57,6 +62,7 @@ contract Journal {
             outputCount,
             _outputPath,
             _outputHash,
+            _isPublished,
             payable(msg.sender)
         );
     }
@@ -68,6 +74,7 @@ contract Journal {
             uint256,
             string memory,
             string memory,
+            bool,
             address payable
         )
     {
@@ -76,6 +83,7 @@ contract Journal {
             output.outputIdNumber,
             output.outputPath,
             output.outputHash,
+            output.isPublished,
             output.uploader
         );
     }
