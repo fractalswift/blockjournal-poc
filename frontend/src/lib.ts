@@ -2,26 +2,9 @@ import { ethers } from 'ethers';
 import Journal from './abis/Journal.json';
 
 // Note: you get this when you run hardhat deploy on local node
-const JOURNAL_CONTRACT_ADDRESS = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const JOURNAL_CONTRACT_ADDRESS = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
 const ABI = Journal.abi;
-
-export async function incrementFileCountForTesting() {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable, get reference to the contract
-    // await this.requestAccount();
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-    //signer needed for transaction that changes state
-    const signer = provider.getSigner();
-    // console.log({ signer });
-    const contract = new ethers.Contract(JOURNAL_CONTRACT_ADDRESS, ABI, signer);
-    // //preform transaction
-    const transaction = await contract.incrementFileCountForTesting();
-    await transaction.wait();
-    // this.fetchGreeting();
-  }
-}
 
 export async function uploadOutput() {
   if (typeof window.ethereum !== 'undefined') {
@@ -36,10 +19,8 @@ export async function uploadOutput() {
     // //preform transaction
     const transaction = await contract.uploadOutput(
       'fakeFilePath',
-      1,
-      'Abstract',
-      'Using Blockchain to store data',
-      'sdjakdfhsdfx102-293-dsd'
+      'sdjakdfhsdfx102-293-dsd',
+      true
     );
     await transaction.wait();
     // this.fetchGreeting();
@@ -48,11 +29,11 @@ export async function uploadOutput() {
 
 function convertOutputDetailsArrayToObject(outputDetailsArray: any[]) {
   return {
-    filePath: outputDetailsArray[0],
-    fileCount: outputDetailsArray[1],
-    abstract: outputDetailsArray[2],
-    title: outputDetailsArray[3],
-    hash: outputDetailsArray[4]
+    outputIdNumber: outputDetailsArray[0],
+    outputPath: outputDetailsArray[1],
+    outputHash: outputDetailsArray[2],
+    isPublished: outputDetailsArray[3],
+    uploaderAddress: outputDetailsArray[4]
   };
 }
 
@@ -91,7 +72,7 @@ export async function getTotalUploadedOutputsCount() {
 
     //try to get the greeting in the contract
     try {
-      const fileCountHex = await contract.fileCount();
+      const fileCountHex = await contract.outputCount();
 
       const fileCount = parseInt(fileCountHex);
 

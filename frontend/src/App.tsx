@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   getTotalUploadedOutputsCount,
-  incrementFileCountForTesting,
   uploadOutput,
   getOutputDetailsByFileNumber,
   connectToMetamask
@@ -24,9 +23,7 @@ function App() {
         <button onClick={getTotalUploadedOutputsCount}>
           Get journal count
         </button>
-        <button onClick={incrementFileCountForTesting}>
-          Increment journal count
-        </button>
+
         <button onClick={uploadOutput}>Upload sample abstract</button>
         <button onClick={handleClickReadOutput}>Read sample abstract</button>
       </header>
@@ -34,9 +31,15 @@ function App() {
       <div>
         {outputDetails && (
           <div>
-            <p>Output details</p>
-            <p>File hash: {outputDetails.hash}</p>
-            <p>File type: {outputDetails.title}</p>
+            <h3>Output details</h3>
+            <p>Output ID number: {outputDetails.outputIdNumber.toString()}</p>
+
+            <p>Output path: {outputDetails.outputPath}</p>
+            <p>Output hash: {outputDetails.outputHash}</p>
+            <p>
+              Publication status:
+              {outputDetails.isPublished ? 'Published' : 'Draft'}
+            </p>
           </div>
         )}
       </div>
