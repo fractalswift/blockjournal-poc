@@ -40,6 +40,8 @@ function App() {
               Publication status:
               {outputDetails.isPublished ? 'Published' : 'Draft'}
             </p>
+
+            <p>Output uploader address: {outputDetails.uploaderAddress}</p>
           </div>
         )}
       </div>
