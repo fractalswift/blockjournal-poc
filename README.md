@@ -8,6 +8,7 @@ To start:
 - copy the abi into frontend/abis/Journal.sol
 - (still in smart-contracts) npx hardhat node
 - npx hardhat run scripts/deploy.ts --network localhost
+- copy the contract address it outputs into frontend/src/lib.ts
 
 - cd ../frontend
 - npm start

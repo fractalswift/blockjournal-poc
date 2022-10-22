@@ -28,7 +28,7 @@ describe('Journal', function () {
         deployJournalContract
       );
 
-      const countBeforeUpload = await journal.fileCount();
+      const countBeforeUpload = await journal.outputCount();
 
       expect(countBeforeUpload).to.equal(0);
     });
@@ -38,35 +38,13 @@ describe('Journal', function () {
         deployJournalContract
       );
 
-      const countBeforeUpload = await journal.fileCount();
+      const countBeforeUpload = await journal.outputCount();
 
       expect(countBeforeUpload).to.equal(0);
 
-      await journal.uploadOutput(
-        'path',
-        1,
-        'type',
-        'name',
-        'sdjakdfhsdfx102-293'
-      );
+      await journal.uploadOutput('path', 'sdjakdfhsdfx102-293');
 
-      const countAfterUpload = await journal.fileCount();
-
-      expect(countAfterUpload).to.equal(1);
-    });
-
-    it('Testing the test function lmao', async function () {
-      const { owner, otherAccount, journal } = await loadFixture(
-        deployJournalContract
-      );
-
-      const countBeforeUpload = await journal.fileCount();
-
-      expect(countBeforeUpload).to.equal(0);
-
-      await journal.incrementFileCountForTesting();
-
-      const countAfterUpload = await journal.fileCount();
+      const countAfterUpload = await journal.outputCount();
 
       expect(countAfterUpload).to.equal(1);
     });

@@ -5,74 +5,48 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 
 contract Journal {
+    // TODO make constuctor
     string public name = 'Blockchain Journal';
-    uint256 public fileCount = 0;
-
-    // TODO - delete, for testing only
-    function incrementFileCountForTesting() public {
-        fileCount++;
-    }
-
-    // TODO - delete, for testing only
-    function decrementFileCountForTesting() public {
-        fileCount--;
-    }
+    uint256 public outputCount = 0;
 
     // this mapping behaves as a "catalog"
-    // of files uploaded to the storage, we declare
+    // of outputs uploaded to the storage, we declare
     // it as public in order to access it directly from the Frontend
-    mapping(uint256 => Output) public files;
+    mapping(uint256 => Output) public outputs;
 
     struct Output {
-        uint256 fileId;
-        string filePath;
-        uint256 fileSize;
-        string fileType;
-        string fileName;
-        string fileHash;
+        // We only need path and hash to validate - all other meta data should be contained within the file
+        uint256 outputIdNumber;
+        string outputPath;
+        string outputHash;
         address payable uploader;
     }
 
     event OutputUploaded(
-        uint256 fileId,
-        string filePath,
-        uint256 fileSize,
-        string fileType,
-        string fileName,
+        uint256 outputIdNumber,
+        string outputPath,
+        string outputHash,
         address payable uploader
     );
 
-    // we upload the file metadata
-    // to the smart contract files
+    // we upload the output details
+    // to the smart contract outputs
     // mapping in order to persist
     // the information.
-    function uploadOutput(
-        string memory _filePath,
-        uint256 _fileSize,
-        string memory _fileType,
-        string memory _fileName,
-        string memory _fileHash
-    ) public {
-        // TODO probably some requirement for file hash
-        require(bytes(_filePath).length > 0);
-        require(bytes(_fileType).length > 0);
-        require(bytes(_fileName).length > 0);
+    function uploadOutput(string memory _outputPath, string memory _outputHash)
+        public
+    {
+        // TODO probably some requirement for output hash
+        require(bytes(_outputPath).length > 0);
+        require(bytes(_outputHash).length > 0);
         require(msg.sender != address(0));
-        require(_fileSize > 0);
 
-        // since solidity mappings
-        // do not have a lenght attribute
-        // the simplest way to control the amount
-        // of files is using a counter
-        fileCount++;
+        outputCount++;
 
-        files[fileCount] = Output(
-            fileCount,
-            _filePath,
-            _fileSize,
-            _fileType,
-            _fileName,
-            _fileHash,
+        outputs[outputCount] = Output(
+            outputCount,
+            _outputPath,
+            _outputHash,
             payable(msg.sender)
         );
 
@@ -80,39 +54,33 @@ contract Journal {
         // we can listen the events emitted from
         // the smart contract in order to update the UI.
         emit OutputUploaded(
-            fileCount,
-            _filePath,
-            _fileSize,
-            _fileType,
-            _fileName,
+            outputCount,
+            _outputPath,
+            _outputHash,
             payable(msg.sender)
         );
     }
 
-    function getOutputByFileNumber(uint256 _fileNumber)
+    function getOutputByFileNumber(uint256 _outputNumber)
         public
         view
         returns (
             uint256,
             string memory,
-            uint256,
-            string memory,
-            string memory,
             string memory,
             address payable
         )
     {
-        Output memory output = files[_fileNumber];
+        Output memory output = outputs[_outputNumber];
         return (
-            output.fileId,
-            output.filePath,
-            output.fileSize,
-            output.fileType,
-            output.fileName,
-            output.fileHash,
+            output.outputIdNumber,
+            output.outputPath,
+            output.outputHash,
             output.uploader
         );
     }
+
+    // function deleteOutput
 
     // function editOutput
 
