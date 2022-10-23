@@ -6,7 +6,11 @@ const JOURNAL_CONTRACT_ADDRESS = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
 const ABI = Journal.abi;
 
-export async function uploadOutput(outputPath: string, outputHash: string) {
+export async function uploadOutput(
+  outputPath: string,
+  outputHash: string,
+  isPublished: boolean
+) {
   if (typeof window.ethereum !== 'undefined') {
     //ethereum is usable, get reference to the contract
     // await this.requestAccount();
@@ -20,7 +24,7 @@ export async function uploadOutput(outputPath: string, outputHash: string) {
     const transaction = await contract.uploadOutput(
       outputPath,
       outputHash,
-      true
+      isPublished
     );
     await transaction.wait();
     // this.fetchGreeting();

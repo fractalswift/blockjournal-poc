@@ -29,8 +29,11 @@ const NewOutputForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('uploading output:', output);
-    generateHashFromString(output.textContent);
-    // await uploadOutput(output);
+
+    const outputPath = generateFakeOutputPath();
+    const outputHash = generateHashFromString(output.textContent);
+
+    await uploadOutput(outputPath, outputHash, output.isPublished);
   };
 
   return (
