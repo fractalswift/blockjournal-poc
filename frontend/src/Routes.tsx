@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './containers/Home';
 import MyOutputs from './containers/MyOutputs';
 import PublicOutputs from './containers/PublicOutputs';
+import Sandbox from './containers/Sandbox';
 
 const AppRoutes = () => {
   return (
@@ -9,6 +10,9 @@ const AppRoutes = () => {
       {/* <Route path="/new-output" element={Login} />
       <Route path="/my-reviews" element={ForgotPassword} />
       */}
+
+      <Route path="/sandbox" element={<Sandbox />} />
+
       <Route path="/my-outputs" element={<MyOutputs />} />
 
       <Route path="/read-public-outputs" element={<PublicOutputs />} />
