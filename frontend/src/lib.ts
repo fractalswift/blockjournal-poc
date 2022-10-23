@@ -77,6 +77,8 @@ export async function getTotalUploadedOutputsCount() {
       const fileCount = parseInt(fileCountHex);
 
       console.log({ fileCount });
+
+      return fileCount;
     } catch (e) {
       console.log('Err: ', e);
     }

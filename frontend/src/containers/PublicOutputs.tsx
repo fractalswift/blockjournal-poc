@@ -1,22 +1,40 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   getOutputDetailsByFileNumber,
   getTotalUploadedOutputsCount
 } from '../lib';
 
 const PublicOutputs = () => {
+  const [totalOutputCount, setTotalOutputCount] = useState<number | undefined>(
+    0
+  );
+  const [outputNumber, setOutputNumber] = useState(0);
   const [outputDetails, setOutputDetails] = useState<any>(null);
 
   const handleClickReadOutput = async () => {
-    const outputDetails = await getOutputDetailsByFileNumber(1);
-    console.log({ outputDetails });
+    const outputDetails = await getOutputDetailsByFileNumber(outputNumber);
     setOutputDetails(outputDetails);
   };
+
+  useEffect(() => {
+    const updateOutputCount = async () => {
+      const totalOutputCount = await getTotalUploadedOutputsCount();
+      setTotalOutputCount(totalOutputCount);
+    };
+    updateOutputCount();
+  }, []);
+
   return (
     <div>
       <h1>Public Outputs</h1>
-      <button onClick={getTotalUploadedOutputsCount}>Get journal count</button>
-      <button onClick={handleClickReadOutput}>Read sample abstract</button>
+      <h2>Total outputs published: {totalOutputCount}</h2>
+
+      <button onClick={handleClickReadOutput}>Get output by ID number</button>
+      <input
+        type="text"
+        value={outputNumber}
+        onChange={(e) => setOutputNumber(Number(e.target.value))}
+      />
       {outputDetails && (
         <div>
           <h3>Output details</h3>
