@@ -6,7 +6,7 @@ const JOURNAL_CONTRACT_ADDRESS = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
 const ABI = Journal.abi;
 
-export async function uploadOutput() {
+export async function uploadOutput(outputPath: string, outputHash: string) {
   if (typeof window.ethereum !== 'undefined') {
     //ethereum is usable, get reference to the contract
     // await this.requestAccount();
@@ -18,8 +18,8 @@ export async function uploadOutput() {
     const contract = new ethers.Contract(JOURNAL_CONTRACT_ADDRESS, ABI, signer);
     // //preform transaction
     const transaction = await contract.uploadOutput(
-      'fakeFilePath',
-      'sdjakdfhsdfx102-293-dsd',
+      outputPath,
+      outputHash,
       true
     );
     await transaction.wait();

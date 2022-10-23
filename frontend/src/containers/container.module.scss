@@ -1,0 +1,18 @@
+.new-output-form {
+  display: flex;
+  flex-direction: column;
+  width: 20em;
+  margin-left: 2em;
+}
+
+.new-output-row {
+  display: flex;
+  width: 20em;
+  gap: 2em;
+  margin-bottom: 1em;
+}
+
+.new-output-text-content {
+  width: 15em;
+  height: 20em;
+}
