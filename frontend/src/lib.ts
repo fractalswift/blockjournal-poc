@@ -1,5 +1,4 @@
 import { ethers } from 'ethers';
-import { create } from 'ipfs-http-client';
 
 import Journal from './abis/Journal.json';
 
@@ -101,23 +100,4 @@ export async function connectToMetamask() {
   const formattedBalance = ethers.utils.formatEther(balance);
 
   console.log({ address, balance, formattedBalance, accounts });
-}
-
-export async function uploadFileToIPFS(str: string) {
-  const ipfs = create({
-    host: 'ipfs.infura.io',
-    port: 5001,
-    protocol: 'https'
-  });
-
-  console.log({ ipfs });
-
-  const blob = new Blob([str], { type: 'text' });
-  const result = await ipfs.add(blob);
-
-  console.log({ result });
-
-  // the result contains the path
-  // to the file on IPFS
-  return result;
 }

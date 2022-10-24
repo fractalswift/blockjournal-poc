@@ -1,4 +1,10 @@
-const express = require('express');
+import express from 'express';
+import dotenv from 'dotenv';
+
+import { uploadOutputToIPFS } from './libs/ipfs.js';
+
+dotenv.config();
+
 const app = express();
 const PORT = 3001;
 
@@ -6,8 +12,9 @@ app.get('/', (req, res) => {
   res.send('Hello World!!!!');
 });
 
-app.get('/upload-output-to-ipfs', (req, res) => {
-  res.send('Here is the IPFS hash of your file');
+app.post('/upload-output-to-ipfs', (req, res) => {
+  uploadOutputToIPFS('my output');
+  res.send('Here is the IPFS hash of your file:');
 });
 app.listen(PORT, () => {
   console.log(`Example app listening on PORT ${PORT}`);
