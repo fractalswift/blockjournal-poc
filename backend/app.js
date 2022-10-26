@@ -12,9 +12,9 @@ app.get('/', (req, res) => {
   res.send('Hello World!!!!');
 });
 
-app.post('/upload-output-to-ipfs', (req, res) => {
-  uploadOutputToIPFS('my output');
-  res.send('Here is the IPFS hash of your file:');
+app.post('/upload-output-to-ipfs', async (req, res) => {
+  const result = await uploadOutputToIPFS('my output');
+  res.send('Here is the IPFS hash of your file:', JSON.stringify(result));
 });
 app.listen(PORT, () => {
   console.log(`Example app listening on PORT ${PORT}`);
