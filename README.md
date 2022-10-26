@@ -1,5 +1,10 @@
 # blockjournal-poc
 
+Setup:
+
+- run npm i in each folder
+- Add infura api key and secret to backend/.env
+
 To start, run these commands in their own terminals:
 
 - npm run start:blockchain
