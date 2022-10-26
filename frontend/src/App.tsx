@@ -1,22 +1,20 @@
 import { useState } from 'react';
 import Navbar from './components/Navbar';
-import {
-  getTotalUploadedOutputsCount,
-  uploadOutput,
-  getOutputDetailsByFileNumber,
-  connectToMetamask
-} from './lib';
+import Header from './components/Header';
+
 import AppRoutes from './Routes';
+
+import styles from './App.module.scss';
+import MetamaskButton from './components/MetamaskButton';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>BlockJournal POC</p>
-        <button onClick={connectToMetamask}>Connect to metamask</button>
+    <div className={styles['app-container']}>
+      <Header />
 
-        <Navbar />
-      </header>
+      <MetamaskButton />
+
+      <Navbar />
 
       <AppRoutes />
     </div>

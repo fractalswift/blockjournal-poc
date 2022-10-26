@@ -1,11 +1,42 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+
+import styles from './Navbar.module.scss';
 
 const Navbar = () => {
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-      <Link to="/">Home</Link>
-      <Link to="/my-outputs">My outputs</Link>
-      <Link to="/read-public-outputs">Read public outputs</Link>
+    <nav className={styles['navbar-container']}>
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? styles['current'] : styles['not-current']
+        }
+        to="/new-output"
+      >
+        Create new output
+      </NavLink>
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? styles['current'] : styles['not-current']
+        }
+        to="/my-outputs"
+      >
+        My outputs
+      </NavLink>
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? styles['current'] : styles['not-current']
+        }
+        to="/my-reviews"
+      >
+        My reviews
+      </NavLink>
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? styles['current'] : styles['not-current']
+        }
+        to="/read-public-outputs"
+      >
+        Read public outputs
+      </NavLink>
     </nav>
   );
 };

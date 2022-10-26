@@ -1,0 +1,16 @@
+.navbar-container {
+  display: flex;
+  justify-content: space-evenly;
+  border: 1px solid lightblue;
+  padding: 1em;
+}
+
+.current {
+  text-decoration: underline;
+  color: blue;
+}
+
+.not-current {
+  text-decoration: none;
+  color: blue;
+}
