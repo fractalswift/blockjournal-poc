@@ -17,7 +17,7 @@ app.post('/upload-output-to-ipfs', async (req, res) => {
   res.send('Here is the IPFS hash of your file:', JSON.stringify(result));
 });
 app.listen(PORT, () => {
-  console.log(`Example app listening on PORT ${PORT}`);
+  console.log(`Server listening on PORT ${PORT}`);
 });
 
 // Boiler plate from express-generator

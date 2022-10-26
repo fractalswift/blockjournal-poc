@@ -12,8 +12,11 @@ function copyAbiToFrontend() {
   );
 }
 
-function writeDeployContractAddresToFrontend(address: string) {
-  fs.writeFileSync('../frontend/src/.env', address);
+function writeDeployedContractAddresToFrontend(address: string) {
+  fs.writeFileSync(
+    '../frontend/src/.env',
+    `JOURNAL_CONTRACT_ADDRESS=${address}`
+  );
 }
 
 async function main() {
@@ -27,7 +30,7 @@ async function main() {
   );
 
   // put the contract address in .env for frontend to use
-  writeDeployContractAddresToFrontend(journal.address);
+  writeDeployedContractAddresToFrontend(journal.address);
 
   copyAbiToFrontend();
 
