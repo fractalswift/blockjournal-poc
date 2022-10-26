@@ -101,3 +101,7 @@ export async function connectToMetamask() {
 
   console.log({ address, balance, formattedBalance, accounts });
 }
+
+export async function uploadFileToIPFS(output: string) {
+  console.log('Place holder function for uploading file to IPFS');
+}

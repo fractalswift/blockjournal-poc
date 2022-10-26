@@ -1,0 +1,25 @@
+{
+  "name": "blockjournal",
+  "version": "1.0.0",
+  "description": "To start:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:blockchain": "concurrently \"cd smart-contracts && npx hardhat clean && npx hardhat compile && npx hardhat node\" \"sleep 5 && cd smart-contracts && npx hardhat run scripts/deploy.ts --network localhost \"",
+    "start:backend": "cd backend && node app.js",
+    "start:frontend": "cd frontend && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fractalswift/blockjournal-poc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fractalswift/blockjournal-poc/issues"
+  },
+  "homepage": "https://github.com/fractalswift/blockjournal-poc#readme",
+  "dependencies": {
+    "concurrently": "7.5.0"
+  }
+}

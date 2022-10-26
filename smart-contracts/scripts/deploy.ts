@@ -1,4 +1,20 @@
 import { ethers } from 'hardhat';
+import fs from 'fs';
+
+function copyAbiToFrontend() {
+  fs.copyFile(
+    './src/artifacts/contracts/Journal.sol/Journal.json',
+    '../frontend/src/abis/Journal.json',
+    (err) => {
+      if (err) throw err;
+      console.log('abi copied successfully and placed in frontend/src/abis');
+    }
+  );
+}
+
+function writeDeployContractAddresToFrontend(address: string) {
+  fs.writeFileSync('../frontend/src/.env', address);
+}
 
 async function main() {
   const Journal = await ethers.getContractFactory('Journal');
@@ -6,7 +22,16 @@ async function main() {
 
   await journal.deployed();
 
-  console.log(`Journal contract deployed at ${journal.address}`);
+  console.log(
+    `Contract deployed at ${journal.address}, copying to frontend/src/.env`
+  );
+
+  // put the contract address in .env for frontend to use
+  writeDeployContractAddresToFrontend(journal.address);
+
+  copyAbiToFrontend();
+
+  console.log('copied abi to frontend/src/abis/Journal.json');
 }
 
 // We recommend this pattern to be able to use async/await everywhere

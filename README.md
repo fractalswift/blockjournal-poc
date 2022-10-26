@@ -1,19 +1,13 @@
 # blockjournal-poc
 
-To start:
+To start, run these commands in their own terminals:
 
-- cd smart-contracts
-- npx hardhat clean
-- npx hardhat compile
-- copy the abi into frontend/abis/Journal.sol
-- (still in smart-contracts) npx hardhat node
-- npx hardhat run scripts/deploy.ts --network localhost
-- copy the contract address it outputs into frontend/src/lib.ts
+- npm run start:blockchain
+- npm run start:backend
+- npm run start:frontend
 
-- cd ../frontend
-- npm start
+Note that the deploy script in smart-contracts also copies contract address and abi to frontend.
 
-- copy one of the hardhat addresses from the hardhat node terminal and import it into metamask
-- switch metamask to local host
+- switch metamask to local host network
 
-- tada
+- you should now be able to interact with the locally deployed contract and server via the frontend.
