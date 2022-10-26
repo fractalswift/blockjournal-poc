@@ -18,7 +18,7 @@ export async function uploadOutputToIPFS(str) {
   });
 
   console.log('sending to ipfs');
-  const result = await client.add('my output');
+  const result = await client.add('myoutput');
   // the result contains the path
   // to the file on IPFS
   console.log(result);

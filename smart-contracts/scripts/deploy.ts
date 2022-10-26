@@ -14,8 +14,8 @@ function copyAbiToFrontend() {
 
 function writeDeployedContractAddresToFrontend(address: string) {
   fs.writeFileSync(
-    '../frontend/src/.env',
-    `JOURNAL_CONTRACT_ADDRESS=${address}`
+    '../frontend/src/contract-address.ts',
+    `export const JOURNAL_CONTRACT_ADDRESS = "${address}"`
   );
 }
 

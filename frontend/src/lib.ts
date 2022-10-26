@@ -3,14 +3,7 @@ import { ethers } from 'ethers';
 import Journal from './abis/Journal.json';
 
 // Note: you get this when you run hardhat deploy on local node
-const JOURNAL_CONTRACT_ADDRESS = getJournalContractAddress();
-
-function getJournalContractAddress() {
-  if (!process.env.JOURNAL_CONTRACT_ADDRESS) {
-    throw new Error('JOURNAL_CONTRACT_ADDRESS not found in .env');
-  }
-  return process.env.JOURNAL_CONTRACT_ADDRESS;
-}
+import { JOURNAL_CONTRACT_ADDRESS } from './contract-address';
 
 const ABI = Journal.abi;
 
