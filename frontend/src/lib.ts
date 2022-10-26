@@ -105,3 +105,14 @@ export async function connectToMetamask() {
 export async function uploadFileToIPFS(output: string) {
   console.log('Place holder function for uploading file to IPFS');
 }
+
+export function getConnectedMetamaskAccounts() {
+  if (typeof window.ethereum !== 'undefined') {
+    //ethereum is usable get reference to the contract
+    return window.ethereum._state.account;
+  }
+}
+
+export function isMetamaskInstalledOnBrowser() {
+  return typeof window.ethereum !== 'undefined';
+}
