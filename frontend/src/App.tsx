@@ -16,7 +16,9 @@ function App() {
 
       <Navbar />
 
-      <AppRoutes />
+      <div className={styles['app-content']}>
+        <AppRoutes />
+      </div>
     </div>
   );
 }
