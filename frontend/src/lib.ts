@@ -100,19 +100,21 @@ export async function connectToMetamask() {
   const formattedBalance = ethers.utils.formatEther(balance);
 
   console.log({ address, balance, formattedBalance, accounts });
+  return { address, balance, formattedBalance, accounts };
 }
 
 export async function uploadFileToIPFS(output: string) {
   console.log('Place holder function for uploading file to IPFS');
 }
 
-export function getConnectedMetamaskAccounts() {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable get reference to the contract
-    return window.ethereum._state.account;
-  }
+export function isMetamaskInstalledOnBrowser() {
+  console.log('Checking if Metamask is installed on browser');
+  return typeof window.ethereum !== 'undefined';
 }
 
-export function isMetamaskInstalledOnBrowser() {
-  return typeof window.ethereum !== 'undefined';
+export async function getMetamaskAccounts() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const accounts = await provider.send('eth_requestAccounts', []);
+
+  return accounts;
 }

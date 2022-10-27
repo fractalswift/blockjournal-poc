@@ -5,7 +5,7 @@ import Header from './components/Header';
 import AppRoutes from './Routes';
 
 import styles from './App.module.scss';
-import MetamaskButton from './components/MetamaskButton';
+import MetamaskButton from './components/MetamaskPanel';
 
 function App() {
   return (
