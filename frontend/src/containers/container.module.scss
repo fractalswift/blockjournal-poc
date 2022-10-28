@@ -16,3 +16,11 @@
   width: 15em;
   height: 20em;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  padding: 1em;
+  border: 1px solid lightblue;
+}
