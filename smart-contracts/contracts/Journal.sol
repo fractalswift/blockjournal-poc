@@ -22,6 +22,7 @@ contract Journal {
         string outputPath;
         string outputHash;
         bool isPublished;
+        address[] reviewers;
         address payable uploader;
     }
 
@@ -30,6 +31,7 @@ contract Journal {
         string outputPath,
         string outputHash,
         bool isPublished,
+        address[] reviewers,
         address payable uploader
     );
 
@@ -40,7 +42,8 @@ contract Journal {
     function uploadOutput(
         string memory _outputPath,
         string memory _outputHash,
-        bool _isPublished
+        bool _isPublished,
+        address[] memory _reviewers
     ) public {
         // TODO probably some requirement for isPublished
         require(bytes(_outputPath).length > 0);
@@ -54,6 +57,7 @@ contract Journal {
             _outputPath,
             _outputHash,
             _isPublished,
+            _reviewers,
             payable(msg.sender)
         );
         outputIdsByUploaderAddress[msg.sender].push(outputCount);
@@ -66,6 +70,7 @@ contract Journal {
             _outputPath,
             _outputHash,
             _isPublished,
+            _reviewers,
             payable(msg.sender)
         );
     }

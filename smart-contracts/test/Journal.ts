@@ -42,7 +42,7 @@ describe('Journal', function () {
 
       expect(countBeforeUpload).to.equal(0);
 
-      await journal.uploadOutput('path', 'sdjakdfhsdfx102-293', true);
+      await journal.uploadOutput('path', 'sdjakdfhsdfx102-293', true, []);
 
       const countAfterUpload = await journal.outputCount();
 
@@ -59,7 +59,8 @@ describe('Journal', function () {
       await journal.uploadOutput(
         'fake-path-to-uploaded-output',
         'sdjakdfhsdfx102-293',
-        true
+        true,
+        []
       );
 
       const article = await journal.getOutputByFileNumber(1);
@@ -76,11 +77,16 @@ describe('Journal', function () {
 
       await journal
         .connect(otherAccount)
-        .uploadOutput('fake-path-to-uploaded-output-1', 'sdsdsd-254', true);
+        .uploadOutput('fake-path-to-uploaded-output-1', 'sdsdsd-254', true, []);
 
       await journal
         .connect(otherAccount)
-        .uploadOutput('fake-path-to-uploaded-output-2', 'sdjakfx102-293', true);
+        .uploadOutput(
+          'fake-path-to-uploaded-output-2',
+          'sdjakfx102-293',
+          true,
+          []
+        );
 
       const outputIds = await journal.getOutputIdsByUploaderAddress(
         otherAccount.address
@@ -113,7 +119,8 @@ describe('Journal', function () {
         .uploadOutput(
           'fake-path-to-not-published-output',
           'sdjakfx102-293',
-          false
+          false,
+          []
         );
 
       await expect(journal.getOutputByFileNumber(1)).to.be.revertedWith(
