@@ -69,7 +69,7 @@ describe('Journal', function () {
       expect(article).to.contain(true);
     });
 
-    it('Should allow any address to get a list of published output by uploader address', async function () {
+    it('Should allow any address to get a list of output IDs by uploader address', async function () {
       const { owner, otherAccount, journal } = await loadFixture(
         deployJournalContract
       );
@@ -82,13 +82,17 @@ describe('Journal', function () {
         .connect(otherAccount)
         .uploadOutput('fake-path-to-uploaded-output-2', 'sdjakfx102-293', true);
 
-      const outputs = await journal.getOutputByUploaderAddress(
+      const outputIds = await journal.getOutputIdsByUploaderAddress(
         otherAccount.address
       );
 
-      expect(outputs.length).to.equal(2);
+      expect(outputIds.length).to.equal(2);
 
-      const [output0, output1] = outputs;
+      const [outputId0, outputId1] = outputIds;
+
+      const output0 = await journal.getOutputByFileNumber(outputId0);
+
+      const output1 = await journal.getOutputByFileNumber(outputId1);
 
       expect(output0).to.contain('fake-path-to-uploaded-output-1');
       expect(output0).to.contain('sdsdsd-254');

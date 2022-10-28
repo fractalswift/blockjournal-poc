@@ -14,7 +14,7 @@ contract Journal {
     // it as public in order to access it directly from the Frontend
     mapping(uint256 => Output) public outputsByIdNumber;
 
-    mapping(address => Output[]) public outputsByUploaderAddress;
+    mapping(address => uint256[]) public outputIdsByUploaderAddress;
 
     struct Output {
         // We only need path and hash to validate - all other meta data should be contained within the file
@@ -56,16 +56,7 @@ contract Journal {
             _isPublished,
             payable(msg.sender)
         );
-        // TODO maybe more gas efficient if just map to ID number and then use this to send multiple get requests from frontend
-        outputsByUploaderAddress[msg.sender].push(
-            Output(
-                outputCount,
-                _outputPath,
-                _outputHash,
-                _isPublished,
-                payable(msg.sender)
-            )
-        );
+        outputIdsByUploaderAddress[msg.sender].push(outputCount);
 
         // From the frontend application
         // we can listen the events emitted from
@@ -100,13 +91,16 @@ contract Journal {
         );
     }
 
-    function getOutputByUploaderAddress(address _uploaderAddress)
+    function getOutputIdsByUploaderAddress(address _uploaderAddress)
         public
         view
-        returns (Output[] memory)
+        returns (uint256[] memory)
     {
-        Output[] memory outputs = outputsByUploaderAddress[_uploaderAddress];
-        return outputs;
+        uint256[] memory outputIds = outputIdsByUploaderAddress[
+            _uploaderAddress
+        ];
+
+        return outputIds;
     }
 
     // function deleteOutput
