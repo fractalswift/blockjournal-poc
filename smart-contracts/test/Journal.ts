@@ -8,12 +8,12 @@ describe('Journal', function () {
   // and reset Hardhat Network to that snapshot in every test.
   async function deployJournalContract() {
     // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners();
+    const [owner, otherAccount, account3] = await ethers.getSigners();
 
     const Journal = await ethers.getContractFactory('Journal');
     const journal = await Journal.deploy();
 
-    return { owner, otherAccount, journal };
+    return { owner, otherAccount, account3, journal };
   }
 
   describe('Deployment', function () {
@@ -126,6 +126,29 @@ describe('Journal', function () {
       await expect(journal.getOutputByFileNumber(1)).to.be.revertedWith(
         'Output is not published'
       );
+    });
+  });
+
+  describe('Reviers', function () {
+    it('Should allow an user to upload an output with specified reviewers', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          true,
+          [account3.address]
+        );
+
+      const output = await journal.getOutputByFileNumber(1);
+
+      console.log({ output });
+
+      expect(output.toString()).to.contain([account3.address]);
     });
   });
 });

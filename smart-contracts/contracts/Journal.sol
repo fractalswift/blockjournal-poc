@@ -83,7 +83,8 @@ contract Journal {
             string memory,
             string memory,
             bool,
-            address payable
+            address payable,
+            address[] memory
         )
     {
         Output memory output = outputsByIdNumber[_outputNumber];
@@ -93,7 +94,8 @@ contract Journal {
             output.outputPath,
             output.outputHash,
             output.isPublished,
-            output.uploader
+            output.uploader,
+            output.reviewers
         );
     }
 
