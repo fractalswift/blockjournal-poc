@@ -85,7 +85,10 @@ export async function getReviewRequestIdsByUserAddress() {
       const outputIds = await contract.getOutputIdsByReviewerAddress(
         userAddress
       );
-      console.log({ outputIds });
+
+      for (let i = 0; i < outputIds.length; i++) {
+        console.log({ outputIds });
+      }
 
       // return convertOutputDetailsArrayToObject(output);
     } catch (e) {
