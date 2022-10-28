@@ -42,11 +42,20 @@ const PublicOutputs = () => {
     <div className={styles['container']}>
       <h1>Public Outputs</h1>
       <h2>Total outputs published: {totalOutputCount}</h2>
-      <div>
-        <button onClick={handleClickReadOutput} disabled={!outputNumber}>
-          Get output by ID number
-        </button>
-        <input type="text" onChange={handleChange} />
+      <div className={styles['search-inputs']}>
+        <span>
+          <button onClick={handleClickReadOutput} disabled={!outputNumber}>
+            Get output by ID number
+          </button>
+          <input type="text" onChange={handleChange} />
+        </span>
+
+        <span>
+          <button onClick={handleClickReadOutput} disabled={!outputNumber}>
+            Get outputs by address
+          </button>
+          <input type="text" onChange={handleChange} />
+        </span>
       </div>
       {outputDetails && outputDetails.uploaderAddress === ZERO_ADDRESS && (
         <div> No output found with this id</div>
