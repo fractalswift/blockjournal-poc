@@ -1,11 +1,23 @@
-const MyOutputs = () => {
+import { useEffect, useState } from 'react';
+import { getReviewRequestIdsByUserAddress } from '../lib';
+
+const MyReviews = () => {
+  const [reviews, setReviews] = useState<any[]>([]);
+
+  useEffect(() => {
+    const getReviews = async () => {
+      const reviews = await getReviewRequestIdsByUserAddress();
+      // setReviews(reviews);))
+    };
+
+    getReviews();
+  }, []);
   return (
     <div>
       <h1>My Reviews</h1>
-      {/* <button onClick={uploadOutput}>Upload sample abstract</button> */}
-      All outputs that you have been invited to review will be listed here.
+      All outputs that you have been invited to review are listed below.
     </div>
   );
 };
 
-export default MyOutputs;
+export default MyReviews;

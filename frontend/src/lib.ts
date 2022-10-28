@@ -25,7 +25,8 @@ export async function uploadOutput(
     const transaction = await contract.uploadOutput(
       outputPath,
       outputHash,
-      isPublished
+      isPublished,
+      []
     );
     await transaction.wait();
     // this.fetchGreeting();
@@ -59,6 +60,34 @@ export async function getOutputDetailsByFileNumber(fileNumber: number) {
       console.log({ output });
 
       return convertOutputDetailsArrayToObject(output);
+    } catch (e) {
+      console.log('Err: ', e);
+    }
+  }
+}
+
+export async function getReviewRequestIdsByUserAddress() {
+  if (typeof window.ethereum !== 'undefined') {
+    //ethereum is usable get reference to the contract
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const contract = new ethers.Contract(
+      JOURNAL_CONTRACT_ADDRESS,
+      ABI,
+      provider
+    );
+
+    const signer = provider.getSigner();
+
+    const userAddress = await signer.getAddress();
+
+    //try to get the greeting in the contract
+    try {
+      const outputIds = await contract.getOutputIdsByReviewerAddress(
+        userAddress
+      );
+      console.log({ outputIds });
+
+      // return convertOutputDetailsArrayToObject(output);
     } catch (e) {
       console.log('Err: ', e);
     }
