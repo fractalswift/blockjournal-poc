@@ -48,8 +48,10 @@ describe('Journal', function () {
 
       expect(countAfterUpload).to.equal(1);
     });
+  });
 
-    it('Should allow any address to read the published output', async function () {
+  describe('Reading and writing', function () {
+    it('Should allow any address to get a published output by ID', async function () {
       const { owner, otherAccount, journal } = await loadFixture(
         deployJournalContract
       );
@@ -65,6 +67,36 @@ describe('Journal', function () {
       expect(article).to.contain('fake-path-to-uploaded-output');
       expect(article).to.contain('sdjakdfhsdfx102-293');
       expect(article).to.contain(true);
+    });
+
+    it('Should allow any address to get a list of published output by uploader address', async function () {
+      const { owner, otherAccount, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput('fake-path-to-uploaded-output-1', 'sdsdsd-254', true);
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput('fake-path-to-uploaded-output-2', 'sdjakfx102-293', true);
+
+      const outputs = await journal.getOutputByUploaderAddress(
+        otherAccount.address
+      );
+
+      expect(outputs.length).to.equal(2);
+
+      const [output0, output1] = outputs;
+
+      expect(output0).to.contain('fake-path-to-uploaded-output-1');
+      expect(output0).to.contain('sdsdsd-254');
+      expect(output0).to.contain(true);
+
+      expect(output1).to.contain('fake-path-to-uploaded-output-2');
+      expect(output1).to.contain('sdjakfx102-293');
+      expect(output1).to.contain(true);
     });
   });
 });
