@@ -62,8 +62,6 @@ describe('Journal', function () {
 
       const article = await journal.getOutputByFileNumber(1);
 
-      article.forEach((item) => console.log(item));
-
       expect(article).to.contain('fake-path-to-uploaded-output');
       expect(article).to.contain('sdjakdfhsdfx102-293');
       expect(article).to.contain(true);

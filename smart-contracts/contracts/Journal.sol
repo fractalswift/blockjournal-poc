@@ -12,7 +12,7 @@ contract Journal {
     // this mapping behaves as a "catalog"
     // of outputs uploaded to the storage, we declare
     // it as public in order to access it directly from the Frontend
-    mapping(uint256 => Output) public outputs;
+    mapping(uint256 => Output) public outputsByIdNumber;
 
     struct Output {
         // We only need path and hash to validate - all other meta data should be contained within the file
@@ -47,7 +47,7 @@ contract Journal {
 
         outputCount++;
 
-        outputs[outputCount] = Output(
+        outputsByIdNumber[outputCount] = Output(
             outputCount,
             _outputPath,
             _outputHash,
@@ -78,7 +78,7 @@ contract Journal {
             address payable
         )
     {
-        Output memory output = outputs[_outputNumber];
+        Output memory output = outputsByIdNumber[_outputNumber];
         return (
             output.outputIdNumber,
             output.outputPath,
