@@ -199,4 +199,62 @@ describe('Journal', function () {
       expect(output).to.contain('fake-path-to-not-published-output');
     });
   });
+
+  describe('Editing', function () {
+    it('Should allow the uploader to change status of isPublished after upload', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          false,
+          []
+        );
+
+      const outputBeforeChange = await journal
+        .connect(otherAccount)
+        .getOutputByFileNumber(1);
+
+      expect(outputBeforeChange).to.contain(false);
+
+      await journal.connect(otherAccount).setIsPublished(1, true);
+
+      const outputAfterChange = await journal
+        .connect(otherAccount)
+        .getOutputByFileNumber(1);
+
+      expect(outputAfterChange).to.contain(true);
+    });
+
+    it('Does not allow an account who is not the uploader to change status of isPublished after upload', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          false,
+          []
+        );
+
+      const outputBeforeChange = await journal
+        .connect(otherAccount)
+        .getOutputByFileNumber(1);
+
+      expect(outputBeforeChange).to.contain(false);
+
+      await expect(
+        journal.connect(account3).setIsPublished(1, true)
+      ).to.be.revertedWith(
+        'Only the uploader has permission to publish the output'
+      );
+    });
+  });
 });

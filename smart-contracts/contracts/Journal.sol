@@ -154,6 +154,16 @@ contract Journal {
         return false;
     }
 
+    function setIsPublished(uint256 _outputId, bool _isPublished) public {
+        require(
+            address(outputsByIdNumber[_outputId].uploader) ==
+                address(msg.sender),
+            'Only the uploader has permission to publish the output'
+        );
+
+        outputsByIdNumber[_outputId].isPublished = _isPublished;
+    }
+
     // function deleteOutput
 
     // function editOutput
