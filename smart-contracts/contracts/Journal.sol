@@ -16,13 +16,14 @@ contract Journal {
 
     mapping(address => uint256[]) public outputIdsByUploaderAddress;
 
+    mapping(address => uint256[]) public outputIdsByReviewerAddress;
+
     struct Output {
         // We only need path and hash to validate - all other meta data should be contained within the file
         uint256 outputIdNumber;
         string outputPath;
         string outputHash;
         bool isPublished;
-        address[] reviewers;
         address payable uploader;
     }
 
@@ -31,7 +32,6 @@ contract Journal {
         string outputPath,
         string outputHash,
         bool isPublished,
-        address[] reviewers,
         address payable uploader
     );
 
@@ -57,10 +57,12 @@ contract Journal {
             _outputPath,
             _outputHash,
             _isPublished,
-            _reviewers,
             payable(msg.sender)
         );
+
         outputIdsByUploaderAddress[msg.sender].push(outputCount);
+
+        batchAddReviewers(_reviewers, outputCount);
 
         // From the frontend application
         // we can listen the events emitted from
@@ -70,7 +72,6 @@ contract Journal {
             _outputPath,
             _outputHash,
             _isPublished,
-            _reviewers,
             payable(msg.sender)
         );
     }
@@ -83,8 +84,7 @@ contract Journal {
             string memory,
             string memory,
             bool,
-            address payable,
-            address[] memory
+            address payable
         )
     {
         Output memory output = outputsByIdNumber[_outputNumber];
@@ -94,8 +94,7 @@ contract Journal {
             output.outputPath,
             output.outputHash,
             output.isPublished,
-            output.uploader,
-            output.reviewers
+            output.uploader
         );
     }
 
@@ -109,6 +108,26 @@ contract Journal {
         ];
 
         return outputIds;
+    }
+
+    function getOutputIdsByReviewerAddress(address _reviewerAddress)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        uint256[] memory outputIds = outputIdsByReviewerAddress[
+            _reviewerAddress
+        ];
+
+        return outputIds;
+    }
+
+    function batchAddReviewers(address[] memory _reviewers, uint256 _outputId)
+        internal
+    {
+        for (uint256 i = 0; i < _reviewers.length; i++) {
+            outputIdsByReviewerAddress[_reviewers[i]].push(_outputId);
+        }
     }
 
     // function deleteOutput

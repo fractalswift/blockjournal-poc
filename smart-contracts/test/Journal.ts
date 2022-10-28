@@ -129,11 +129,13 @@ describe('Journal', function () {
     });
   });
 
-  describe('Reviers', function () {
+  describe('Reviewers', function () {
     it('Should allow an user to upload an output with specified reviewers', async function () {
       const { owner, otherAccount, account3, journal } = await loadFixture(
         deployJournalContract
       );
+
+      const reviewerAddress = account3.address;
 
       await journal
         .connect(otherAccount)
@@ -141,14 +143,16 @@ describe('Journal', function () {
           'fake-path-to-not-published-output',
           'sdjakfx102-293',
           true,
-          [account3.address]
+          [reviewerAddress]
         );
 
       const output = await journal.getOutputByFileNumber(1);
 
-      console.log({ output });
+      const outputIds = await journal.getOutputIdsByReviewerAddress(
+        reviewerAddress
+      );
 
-      expect(output.toString()).to.contain([account3.address]);
+      expect(outputIds[0].toString()).to.contain('1');
     });
   });
 });
