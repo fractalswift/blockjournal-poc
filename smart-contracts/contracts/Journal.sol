@@ -158,9 +158,26 @@ contract Journal {
         require(
             address(outputsByIdNumber[_outputId].uploader) ==
                 address(msg.sender),
-            'Only the uploader has permission to publish the output'
+            'Only the uploader can publish the output'
         );
 
+        outputsByIdNumber[_outputId].isPublished = _isPublished;
+    }
+
+    function updateOutput(
+        uint256 _outputId,
+        string memory _outputPath,
+        string memory _outputHash,
+        bool _isPublished
+    ) public {
+        require(
+            address(outputsByIdNumber[_outputId].uploader) ==
+                address(msg.sender),
+            'Only the uploader can update the output'
+        );
+
+        outputsByIdNumber[_outputId].outputPath = _outputPath;
+        outputsByIdNumber[_outputId].outputHash = _outputHash;
         outputsByIdNumber[_outputId].isPublished = _isPublished;
     }
 

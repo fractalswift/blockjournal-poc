@@ -252,9 +252,62 @@ describe('Journal', function () {
 
       await expect(
         journal.connect(account3).setIsPublished(1, true)
-      ).to.be.revertedWith(
-        'Only the uploader has permission to publish the output'
+      ).to.be.revertedWith('Only the uploader can publish the output');
+    });
+
+    it('Should allow the uploader to change the outputPath and outputHash after upload', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
       );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          false,
+          []
+        );
+
+      const outputBeforeChange = await journal
+        .connect(otherAccount)
+        .getOutputByFileNumber(1);
+
+      await journal
+        .connect(otherAccount)
+        .updateOutput(1, 'new-path', '0xNewHash0x', true);
+
+      const outputAfterChange = await journal
+        .connect(otherAccount)
+        .getOutputByFileNumber(1);
+
+      expect(outputAfterChange).to.contain('new-path');
+      expect(outputAfterChange).to.contain('0xNewHash0x');
+    });
+
+    it('Does not allow an account who is not the uploader to edit any details after upload', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          false,
+          []
+        );
+
+      const outputBeforeChange = await journal
+        .connect(otherAccount)
+        .getOutputByFileNumber(1);
+
+      await expect(
+        journal
+          .connect(account3)
+          .updateOutput(1, 'new-path', '0xNewHash0x', true)
+      ).to.be.revertedWith('Only the uploader can update the output');
     });
   });
 });
