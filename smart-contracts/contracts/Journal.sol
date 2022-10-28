@@ -93,7 +93,8 @@ contract Journal {
 
         require(
             output.isPublished == true ||
-                address(output.uploader) == address(msg.sender),
+                address(output.uploader) == address(msg.sender) ||
+                isReviewer(msg.sender, _outputNumber),
             'Output is not published'
         );
         return (
@@ -135,6 +136,22 @@ contract Journal {
         for (uint256 i = 0; i < _reviewers.length; i++) {
             outputIdsByReviewerAddress[_reviewers[i]].push(_outputId);
         }
+    }
+
+    function isReviewer(address _callerAddress, uint256 _outputId)
+        public
+        view
+        returns (bool)
+    {
+        uint256[] memory outputIds = outputIdsByReviewerAddress[_callerAddress];
+
+        for (uint256 i = 0; i < outputIds.length; i++) {
+            if (outputIds[i] == _outputId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // function deleteOutput

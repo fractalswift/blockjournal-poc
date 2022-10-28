@@ -178,29 +178,25 @@ describe('Journal', function () {
       expect(outputIds[0].toString()).to.contain('1');
     });
 
-    // it('Should allow a reviewer to read an output even if the output is not published', async function () {
-    //   const { owner, otherAccount, account3, journal } = await loadFixture(
-    //     deployJournalContract
-    //   );
+    it('Should allow a reviewer to read an output even if the output is not published', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
+      );
 
-    //   const reviewerAddress = account3.address;
+      const reviewer = account3;
 
-    //   await journal
-    //     .connect(otherAccount)
-    //     .uploadOutput(
-    //       'fake-path-to-not-published-output',
-    //       'sdjakfx102-293',
-    //       false,
-    //       [reviewerAddress]
-    //     );
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          false,
+          [reviewer.address]
+        );
 
-    //   const output = await journal.getOutputByFileNumber(1);
+      const output = await journal.connect(reviewer).getOutputByFileNumber(1);
 
-    //   const outputIds = await journal.getOutputIdsByReviewerAddress(
-    //     reviewerAddress
-    //   );
-
-    //   expect(outputIds[0].toString()).to.contain('1');
-    // });
+      expect(output).to.contain('fake-path-to-not-published-output');
+    });
   });
 });
