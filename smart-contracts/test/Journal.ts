@@ -102,5 +102,23 @@ describe('Journal', function () {
       expect(output1).to.contain('sdjakfx102-293');
       expect(output1).to.contain(true);
     });
+
+    it('Does not allow public reading of output if isPublished flag is not set to true', async function () {
+      const { owner, otherAccount, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          false
+        );
+
+      await expect(journal.getOutputByFileNumber(1)).to.be.revertedWith(
+        'Output is not published'
+      );
+    });
   });
 });
