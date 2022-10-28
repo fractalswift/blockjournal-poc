@@ -88,7 +88,14 @@ contract Journal {
         )
     {
         Output memory output = outputsByIdNumber[_outputNumber];
-        require(output.isPublished == true, 'Output is not published');
+
+        // HERE // outputIdsByReviewerAddress(msg.sender)
+
+        require(
+            output.isPublished == true ||
+                address(output.uploader) == address(msg.sender),
+            'Output is not published'
+        );
         return (
             output.outputIdNumber,
             output.outputPath,

@@ -127,6 +127,29 @@ describe('Journal', function () {
         'Output is not published'
       );
     });
+
+    it('Should allow an uploader to read their own output even if the output is not published', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      const reviewerAddress = account3.address;
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output',
+          'sdjakfx102-293',
+          false,
+          [reviewerAddress]
+        );
+
+      const output = await journal
+        .connect(otherAccount)
+        .getOutputByFileNumber(1);
+
+      expect(output).to.contain('fake-path-to-not-published-output');
+    });
   });
 
   describe('Reviewers', function () {
@@ -154,5 +177,30 @@ describe('Journal', function () {
 
       expect(outputIds[0].toString()).to.contain('1');
     });
+
+    // it('Should allow a reviewer to read an output even if the output is not published', async function () {
+    //   const { owner, otherAccount, account3, journal } = await loadFixture(
+    //     deployJournalContract
+    //   );
+
+    //   const reviewerAddress = account3.address;
+
+    //   await journal
+    //     .connect(otherAccount)
+    //     .uploadOutput(
+    //       'fake-path-to-not-published-output',
+    //       'sdjakfx102-293',
+    //       false,
+    //       [reviewerAddress]
+    //     );
+
+    //   const output = await journal.getOutputByFileNumber(1);
+
+    //   const outputIds = await journal.getOutputIdsByReviewerAddress(
+    //     reviewerAddress
+    //   );
+
+    //   expect(outputIds[0].toString()).to.contain('1');
+    // });
   });
 });
