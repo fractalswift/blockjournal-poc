@@ -49,13 +49,6 @@ const PublicOutputs = () => {
           </button>
           <input type="text" onChange={handleChange} />
         </span>
-
-        <span>
-          <button onClick={handleClickReadOutput} disabled={!outputNumber}>
-            Get outputs by address
-          </button>
-          <input type="text" onChange={handleChange} />
-        </span>
       </div>
       {outputDetails && outputDetails.uploaderAddress === ZERO_ADDRESS && (
         <div> No output found with this id</div>

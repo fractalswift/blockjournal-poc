@@ -123,9 +123,9 @@ describe('Journal', function () {
           []
         );
 
-      await expect(
-        journal.connect(account3).getOutputByFileNumber(1)
-      ).to.be.revertedWith('Output is not published');
+      const output = await journal.connect(account3).getOutputByFileNumber(1);
+
+      expect(output).to.contain('0x0000000000000000000000000000000000000000');
     });
 
     it('Should allow an uploader to read their own output even if the output is not published', async function () {
@@ -195,8 +195,6 @@ describe('Journal', function () {
         );
 
       const output = await journal.connect(reviewer).getOutputByFileNumber(1);
-
-      console.log({ output });
 
       expect(output).to.contain('fake-path-to-not-published-output');
     });

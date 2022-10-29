@@ -78,6 +78,7 @@ contract Journal {
         );
     }
 
+    // TODO find a way to not return unpublished outputs, but without throwing an error
     function getOutputByFileNumber(uint256 _outputNumber)
         public
         view
@@ -94,24 +95,25 @@ contract Journal {
 
         // HERE // outputIdsByReviewerAddress(msg.sender)
 
-        require(
+        if (
             output.isPublished == true ||
-                address(output.uploader) == address(msg.sender) ||
-                isReviewer(msg.sender, _outputNumber),
-            'Output is not published'
-        );
-
-        address[] memory reviewers = getReviewers(_outputNumber);
-        return (
-            output.outputIdNumber,
-            output.outputPath,
-            output.outputHash,
-            output.isPublished,
-            output.uploader,
-            reviewers
-        );
+            output.uploader == msg.sender ||
+            isReviewer(msg.sender, _outputNumber)
+        ) {
+            return (
+                output.outputIdNumber,
+                output.outputPath,
+                output.outputHash,
+                output.isPublished,
+                output.uploader,
+                output.reviewers
+            );
+        } else {
+            return (0, '', '', false, payable(address(0)), new address[](0));
+        }
     }
 
+    // TODO find a way to not return unpublished outputs, but without throwing an error
     function getOutputIdsByUploaderAddress(address _uploaderAddress)
         public
         view
@@ -145,16 +147,16 @@ contract Journal {
 
             // TODO debugging only - delete later
 
-            uint256[] memory outputIds = outputIdsByReviewerAddress[
-                _reviewers[i]
-            ];
+            // uint256[] memory outputIds = outputIdsByReviewerAddress[
+            //     _reviewers[i]
+            // ];
 
-            if (outputIds.length > 1) {
-                uint256 outputId0 = outputIds[0];
-                uint256 outputId1 = outputIds[1];
+            // if (outputIds.length > 1) {
+            //     uint256 outputId0 = outputIds[0];
+            //     uint256 outputId1 = outputIds[1];
 
-                console.log('hi', outputId0, outputId1);
-            }
+            //     // console.log('hi', outputId0, outputId1);
+            // }
 
             // end debug
         }

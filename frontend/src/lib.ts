@@ -24,6 +24,11 @@ export async function uploadOutput(
     const signer = provider.getSigner();
     // console.log({ signer });
     const contract = new ethers.Contract(JOURNAL_CONTRACT_ADDRESS, ABI, signer);
+
+    console.log('uploading: ', outputPath, outputHash, isPublished, [
+      MY_DEV_ADDRESS_2
+    ]);
+
     // //preform transaction
     const transaction = await contract.uploadOutput(
       outputPath,
@@ -32,7 +37,6 @@ export async function uploadOutput(
       [MY_DEV_ADDRESS_2]
     );
     await transaction.wait();
-    // this.fetchGreeting();
   }
 }
 
@@ -140,9 +144,9 @@ export async function getMultipleOutputsById(
         const output = await contract.getOutputByFileNumber(i);
         outputs.push(convertOutputDetailsArrayToObject(output));
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log('Err: ', e);
-      throw new Error('Error getting outputs');
+      throw new Error(`Error getting outputs: ${e.message}`);
     }
 
     return outputs;
@@ -161,7 +165,6 @@ export async function getTotalUploadedOutputsCount() {
       provider
     );
 
-    //try to get the greeting in the contract
     try {
       const fileCountHex = await contract.outputCount();
 

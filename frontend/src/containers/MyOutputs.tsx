@@ -20,7 +20,6 @@ const MyOutputs = () => {
 
   useEffect(() => {
     const getMyOutputs = async () => {
-      console.log('fetching for this many ids:', outputIds.length);
       const outputs = await getMultipleOutputsById(outputIds);
 
       setOutputs(outputs);

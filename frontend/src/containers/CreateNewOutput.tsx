@@ -20,7 +20,7 @@ const NewOutputForm = () => {
     setOutput({ ...output, [name]: value });
   };
 
-  const handleChangeIsPublshed = (e: any) => {
+  const handleChangeIsPublished = (e: any) => {
     const { name, value } = e.target;
 
     setOutput({ ...output, [name]: !output.isPublished });
@@ -54,7 +54,7 @@ const NewOutputForm = () => {
           <input
             type="checkbox"
             name="isPublished"
-            onChange={handleChangeIsPublshed}
+            onChange={handleChangeIsPublished}
           />
         </div>
         <button type="submit">Submit</button>
