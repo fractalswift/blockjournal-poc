@@ -7,8 +7,16 @@ import { JOURNAL_CONTRACT_ADDRESS } from './contract-address';
 
 const ABI = Journal.abi;
 
-const MY_DEV_ADDRESS = '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199';
-const MY_DEV_ADDRESS_2 = '0xdD2FD4581271e230360230F9337D5c0430Bf44C0';
+const getEthereumStuff = () => {
+  if (typeof window.ethereum !== 'undefined') {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(JOURNAL_CONTRACT_ADDRESS, ABI, signer);
+
+    return { provider, signer, contract };
+  }
+  throw new Error('No ethereum provider found');
+};
 
 export async function uploadOutput(
   outputPath: string,
@@ -16,26 +24,17 @@ export async function uploadOutput(
   isPublished: boolean,
   reviewers: string[]
 ) {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable, get reference to the contract
-    // await this.requestAccount();
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const { contract } = getEthereumStuff();
+  console.log('uploading: ', outputPath, outputHash, isPublished, reviewers);
 
-    //signer needed for transaction that changes state
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(JOURNAL_CONTRACT_ADDRESS, ABI, signer);
-
-    console.log('uploading: ', outputPath, outputHash, isPublished, reviewers);
-
-    // //preform transaction
-    const transaction = await contract.uploadOutput(
-      outputPath,
-      outputHash,
-      isPublished,
-      reviewers
-    );
-    await transaction.wait();
-  }
+  // //preform transaction
+  const transaction = await contract.uploadOutput(
+    outputPath,
+    outputHash,
+    isPublished,
+    reviewers
+  );
+  await transaction.wait();
 }
 
 function convertOutputDetailsArrayToObject(outputDetailsArray: any[]) {

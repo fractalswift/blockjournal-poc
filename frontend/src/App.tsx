@@ -8,16 +8,20 @@ import styles from './App.module.scss';
 import MetamaskButton from './components/MetamaskPanel';
 
 function App() {
+  const [isMetamaskConnected, setIsMetamaskConnected] = useState(false);
   return (
     <div className={styles['app-container']}>
       <Header />
 
-      <MetamaskButton />
+      <MetamaskButton
+        isMetamaskConnected={isMetamaskConnected}
+        setIsMetamaskConnected={setIsMetamaskConnected}
+      />
 
       <Navbar />
 
       <div className={styles['app-content']}>
-        <AppRoutes />
+        <AppRoutes isMetamaskConnected={isMetamaskConnected} />
       </div>
     </div>
   );

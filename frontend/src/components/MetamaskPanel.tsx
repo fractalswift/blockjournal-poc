@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 
 import styles from './MetamaskPanel.module.scss';
 
-const MetamaskButton = () => {
+const MetamaskButton = ({
+  isMetamaskConnected,
+  setIsMetamaskConnected
+}: any) => {
   const [isMetamaskInstalled, setIsMetamaskInstalled] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  // const [isMetamaskConnected, setIsMetamaskConnected] = useState(false);
   const [connectionDetails, setConnectionDetails] = useState<any>({});
 
   useEffect(() => {
@@ -25,10 +28,10 @@ const MetamaskButton = () => {
     console.log('Connecting to metamask...');
     if (connectionDetails && connectionDetails.address) {
       console.log('Metamask is connected');
-      return setIsConnected(true);
+      return setIsMetamaskConnected(true);
     }
 
-    setIsConnected(false);
+    setIsMetamaskConnected(false);
 
     connectAndSetDetails();
   }, [connectionDetails]);
@@ -47,7 +50,7 @@ const MetamaskButton = () => {
     );
   }
 
-  if (!isConnected) {
+  if (!isMetamaskConnected) {
     return (
       <div className={styles['container']}>
         <Button variant="contained" color="error">

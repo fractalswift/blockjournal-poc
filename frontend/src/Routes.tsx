@@ -6,7 +6,7 @@ import MyReviews from './containers/MyReviews';
 import PublicOutputs from './containers/PublicOutputs';
 import Sandbox from './containers/Sandbox';
 
-const AppRoutes = () => {
+const AppRoutes = ({ isMetamaskConnected }: any) => {
   return (
     <Routes>
       {/* <Route path="/new-output" element={Login} />
@@ -15,11 +15,20 @@ const AppRoutes = () => {
 
       <Route path="/sandbox" element={<Sandbox />} />
 
-      <Route path="/new-output" element={<CreateNewOutput />} />
+      <Route
+        path="/new-output"
+        element={isMetamaskConnected ? <CreateNewOutput /> : <Home />}
+      />
 
-      <Route path="/my-outputs" element={<MyOutputs />} />
+      <Route
+        path="/my-outputs"
+        element={isMetamaskConnected ? <MyOutputs /> : <Home />}
+      />
 
-      <Route path="/my-reviews" element={<MyReviews />} />
+      <Route
+        path="/my-reviews"
+        element={isMetamaskConnected ? <MyReviews /> : <Home />}
+      />
 
       <Route path="/read-public-outputs" element={<PublicOutputs />} />
 
