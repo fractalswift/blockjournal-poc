@@ -8,6 +8,7 @@ import { JOURNAL_CONTRACT_ADDRESS } from './contract-address';
 const ABI = Journal.abi;
 
 const MY_DEV_ADDRESS = '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199';
+const MY_DEV_ADDRESS_2 = '0xdD2FD4581271e230360230F9337D5c0430Bf44C0';
 
 export async function uploadOutput(
   outputPath: string,
@@ -28,7 +29,7 @@ export async function uploadOutput(
       outputPath,
       outputHash,
       isPublished,
-      ['0xdD2FD4581271e230360230F9337D5c0430Bf44C0']
+      [MY_DEV_ADDRESS_2]
     );
     await transaction.wait();
     // this.fetchGreeting();
@@ -87,6 +88,31 @@ export async function getReviewRequestIdsByUserAddress() {
       );
 
       return outputIds;
+    } catch (e) {
+      console.log('Err: ', e);
+    }
+  }
+}
+
+export async function getMultipleOutputsById(outputIds: string[]) {
+  if (typeof window.ethereum !== 'undefined') {
+    //ethereum is usable get reference to the contract
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const contract = new ethers.Contract(
+      JOURNAL_CONTRACT_ADDRESS,
+      ABI,
+      provider
+    );
+
+    try {
+      let outputs = [];
+
+      for (let i of outputIds) {
+        const output = await contract.getOutputByFileNumber(i);
+        outputs.push(convertOutputDetailsArrayToObject(output));
+      }
+
+      return outputs;
     } catch (e) {
       console.log('Err: ', e);
     }

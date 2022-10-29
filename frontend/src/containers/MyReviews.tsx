@@ -22,22 +22,25 @@ const MyReviews = () => {
   useEffect(() => {
     const getReviews = async () => {
       for (let id of outputIds) {
-        const output = await getOutputDetailsByFileNumber(id);
-        setOutputs([output]);
+        const output = await getOutputDetailsByFileNumber(id.toString());
+        console.log('fetching for outputId', id.toString());
+        let currentOutputs = outputs;
+        currentOutputs.push(output);
+        console.log({ currentOutputs });
+        setOutputs(currentOutputs);
       }
     };
     getReviews();
   }, [outputIds]);
 
   if (outputs.length) {
-    console.log({ outputs });
+    console.log({ outputIds });
+    console.log('There are this many outputs in state:', outputs.length);
     return (
       <>
         {outputs.map((output: any) => {
           console.log(output);
-          return (
-            <OutputCard outputDetails={output} key={output.outputIdNumber} />
-          );
+          return <OutputCard outputDetails={output} key={output.outputHash} />;
         })}
       </>
     );
