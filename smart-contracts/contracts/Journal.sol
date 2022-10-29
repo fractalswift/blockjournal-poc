@@ -143,7 +143,7 @@ contract Journal {
         for (uint256 i = 0; i < _reviewers.length; i++) {
             outputIdsByReviewerAddress[_reviewers[i]].push(_outputId);
 
-            // debugging only - delete later
+            // TODO debugging only - delete later
 
             uint256[] memory outputIds = outputIdsByReviewerAddress[
                 _reviewers[i]

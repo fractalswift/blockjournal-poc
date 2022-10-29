@@ -69,6 +69,32 @@ export async function getOutputDetailsByFileNumber(fileNumber: number) {
   }
 }
 
+export async function getOutputIdsByUploaderAddress() {
+  if (typeof window.ethereum !== 'undefined') {
+    //ethereum is usable get reference to the contract
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const contract = new ethers.Contract(
+      JOURNAL_CONTRACT_ADDRESS,
+      ABI,
+      provider
+    );
+
+    const signer = provider.getSigner();
+
+    const userAddress = await signer.getAddress();
+
+    try {
+      const outputIds = await contract.getOutputIdsByUploaderAddress(
+        userAddress
+      );
+
+      return outputIds;
+    } catch (e) {
+      console.log('Err: ', e);
+    }
+  }
+}
+
 export async function getReviewRequestIdsByUserAddress() {
   if (typeof window.ethereum !== 'undefined') {
     //ethereum is usable get reference to the contract
