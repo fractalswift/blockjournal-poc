@@ -1,9 +1,11 @@
+import axios, { AxiosResponse } from 'axios';
 import { ethers } from 'ethers';
 
 import Journal from './abis/Journal.json';
 
 // Note: you get this when you run hardhat deploy on local node
 import { JOURNAL_CONTRACT_ADDRESS } from './contract-address';
+import { NewOutputMetadata } from './types';
 
 const ABI = Journal.abi;
 
@@ -18,14 +20,21 @@ const getEthereumStuff = () => {
   throw new Error('No ethereum provider found');
 };
 
-export async function uploadOutput(
-  outputPath: string,
-  outputHash: string,
-  isPublished: boolean,
-  reviewers: string[]
-) {
+async function uploadMetadataToContract({
+  isPublished,
+  outputHash,
+  reviewers,
+  outputPath
+}: NewOutputMetadata) {
+  console.log(
+    'uploading meta data: ',
+    outputHash,
+    isPublished,
+    reviewers,
+    outputPath
+  );
+
   const { contract } = getEthereumStuff();
-  console.log('uploading: ', outputPath, outputHash, isPublished, reviewers);
 
   // //preform transaction
   const transaction = await contract.uploadOutput(
@@ -35,6 +44,23 @@ export async function uploadOutput(
     reviewers
   );
   await transaction.wait();
+}
+
+export async function uploadOutput({
+  outputHash,
+  isPublished,
+  reviewers,
+  textContent
+}: NewOutputMetadata) {
+  const response = await uploadFileToIPFS(textContent);
+  const outputPath = response.data.path;
+
+  await uploadMetadataToContract({
+    outputPath,
+    outputHash,
+    isPublished,
+    reviewers
+  });
 }
 
 function convertOutputDetailsArrayToObject(outputDetailsArray: any[]) {
@@ -136,8 +162,20 @@ export async function connectToMetamask() {
   return { address, balance, formattedBalance, accounts };
 }
 
-export async function uploadFileToIPFS(output: string) {
-  console.log('Place holder function for uploading file to IPFS');
+export async function uploadFileToIPFS(output: any) {
+  console.log('Uploading file to IPFS...', { output });
+
+  let response: AxiosResponse;
+
+  try {
+    response = await axios.post('http://localhost:3001/upload-output-to-ipfs', {
+      output
+    });
+  } catch (error: any) {
+    throw new Error(`Error uploading file to IPFS: ${error.message}`);
+  }
+
+  return response;
 }
 
 export function isMetamaskInstalledOnBrowser() {

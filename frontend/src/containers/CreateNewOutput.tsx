@@ -1,25 +1,24 @@
 import { useState } from 'react';
-import { uploadOutput } from '../lib';
-import { generateHashFromString, generateFakeOutputPath } from '../utils';
+import { uploadOutput, uploadFileToIPFS } from '../lib';
+import { generateHashFromString } from '../utils';
+import { NewOutputMetadata } from '../types';
 
 import styles from './container.module.scss';
 
-interface NewOutput {
-  textContent: string;
-  isPublished: boolean;
-}
-
 const NewOutputForm = () => {
-  const [output, setOutput] = useState<NewOutput>({
+  const [output, setOutput] = useState<NewOutputMetadata>({
     textContent: '',
-    isPublished: false
+    isPublished: false,
+    outputHash: '',
+    reviewers: []
   });
 
   const [reviewers, setReviewers] = useState<any>([]);
 
   const handleChangeText = (e: any) => {
     const { name, value } = e.target;
-    setOutput({ ...output, [name]: value });
+    const outputHash = generateHashFromString(value);
+    setOutput({ ...output, [name]: value, outputHash });
   };
 
   const handleChangeIsPublished = (e: any) => {
@@ -43,9 +42,10 @@ const NewOutputForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('uploading output:', output);
-    const outputPath = generateFakeOutputPath();
-    const outputHash = generateHashFromString(output.textContent);
-    await uploadOutput(outputPath, outputHash, output.isPublished, reviewers);
+
+    const { isPublished, textContent, outputHash, reviewers } = output;
+
+    await uploadOutput({ isPublished, textContent, outputHash, reviewers });
   };
 
   return (
@@ -105,6 +105,9 @@ const NewOutputForm = () => {
         </div>
         <button type="submit">Submit</button>
       </form>
+      <button onClick={() => uploadFileToIPFS('my text')}>
+        Upload file to IPFS
+      </button>
     </div>
   );
 };

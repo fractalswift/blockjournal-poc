@@ -13,6 +13,7 @@ function generateRandomString(length: number) {
   return result;
 }
 
+// for mocks/tests
 export function generateFakeOutputPath() {
   return `fake/path/${generateRandomString(10)}`;
 }
