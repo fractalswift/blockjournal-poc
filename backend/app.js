@@ -18,11 +18,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/upload-output-to-ipfs', async (req, res) => {
-  console.log(req.body);
-  console.log(Object.keys(req));
-  // const result = await uploadOutputToIPFS('my output');
-  const result = 'pies';
-  res.send(JSON.stringify(result));
+  const { output } = req.body;
+  const { path } = await uploadOutputToIPFS(output);
+
+  console.log({ path });
+  res.send(JSON.stringify({ path }));
 });
 app.listen(PORT, () => {
   console.log(`Server listening on PORT ${PORT}`);
