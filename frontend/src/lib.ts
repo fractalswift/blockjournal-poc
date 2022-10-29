@@ -49,137 +49,85 @@ function convertOutputDetailsArrayToObject(outputDetailsArray: any[]) {
 }
 
 export async function getOutputDetailsByFileNumber(fileNumber: number) {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable get reference to the contract
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(
-      JOURNAL_CONTRACT_ADDRESS,
-      ABI,
-      provider
+  const { contract } = getEthereumStuff();
+
+  try {
+    const output = await contract.getOutputByFileNumber(fileNumber);
+
+    return convertOutputDetailsArrayToObject(output);
+  } catch (e) {
+    throw new Error(
+      `Error getting output details for file number ${fileNumber}`
     );
-
-    try {
-      const output = await contract.getOutputByFileNumber(fileNumber);
-
-      return convertOutputDetailsArrayToObject(output);
-    } catch (e) {
-      throw new Error(
-        `Error getting output details for file number ${fileNumber}`
-      );
-    }
   }
 }
 
 export async function getOutputIdsByUploaderAddress() {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable get reference to the contract
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(
-      JOURNAL_CONTRACT_ADDRESS,
-      ABI,
-      provider
-    );
+  const { contract, signer } = getEthereumStuff();
 
-    const signer = provider.getSigner();
+  const userAddress = await signer.getAddress();
 
-    const userAddress = await signer.getAddress();
+  try {
+    const outputIds = await contract.getOutputIdsByUploaderAddress(userAddress);
 
-    try {
-      const outputIds = await contract.getOutputIdsByUploaderAddress(
-        userAddress
-      );
-
-      return outputIds;
-    } catch (e) {
-      throw new Error(`Error getting output ids for user ${userAddress}`);
-    }
+    return outputIds;
+  } catch (e) {
+    throw new Error(`Error getting output ids for user ${userAddress}`);
   }
 }
 
 export async function getReviewRequestIdsByUserAddress() {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable get reference to the contract
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(
-      JOURNAL_CONTRACT_ADDRESS,
-      ABI,
-      provider
-    );
+  const { contract, signer } = getEthereumStuff();
 
-    const signer = provider.getSigner();
+  const userAddress = await signer.getAddress();
 
-    const userAddress = await signer.getAddress();
+  try {
+    const outputIds = await contract.getOutputIdsByReviewerAddress(userAddress);
 
-    try {
-      const outputIds = await contract.getOutputIdsByReviewerAddress(
-        userAddress
-      );
-
-      return outputIds;
-    } catch (e) {
-      throw new Error(`Error getting output ids for user ${userAddress}`);
-    }
+    return outputIds;
+  } catch (e) {
+    throw new Error(`Error getting output ids for user ${userAddress}`);
   }
 }
 
 export async function getMultipleOutputsById(
   outputIds: string[]
 ): Promise<any[]> {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable get reference to the contract
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(
-      JOURNAL_CONTRACT_ADDRESS,
-      ABI,
-      provider
-    );
+  const { contract } = getEthereumStuff();
 
-    let outputs = [];
+  let outputs = [];
 
-    try {
-      for (let i of outputIds) {
-        const output = await contract.getOutputByFileNumber(i);
-        outputs.push(convertOutputDetailsArrayToObject(output));
-      }
-    } catch (e: any) {
-      throw new Error(`Error getting outputs: ${e.message}`);
+  try {
+    for (let i of outputIds) {
+      const output = await contract.getOutputByFileNumber(i);
+      outputs.push(convertOutputDetailsArrayToObject(output));
     }
-
-    return outputs;
+  } catch (e: any) {
+    throw new Error(`Error getting outputs: ${e.message}`);
   }
 
-  throw new Error('No ethereum');
+  return outputs;
 }
 
 export async function getTotalUploadedOutputsCount() {
-  if (typeof window.ethereum !== 'undefined') {
-    //ethereum is usable get reference to the contract
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(
-      JOURNAL_CONTRACT_ADDRESS,
-      ABI,
-      provider
-    );
+  const { contract } = getEthereumStuff();
 
-    try {
-      const fileCountHex = await contract.outputCount();
+  try {
+    const fileCountHex = await contract.outputCount();
 
-      const fileCount = parseInt(fileCountHex);
+    const fileCount = parseInt(fileCountHex);
 
-      console.log({ fileCount });
-
-      return fileCount;
-    } catch (e) {
-      console.log('Err: ', e);
-      throw new Error(`Error getting total uploaded outputs count`);
-    }
+    return fileCount;
+  } catch (e) {
+    console.log('Err: ', e);
+    throw new Error(`Error getting total uploaded outputs count`);
   }
 }
 
 export async function connectToMetamask() {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const { provider, signer } = getEthereumStuff();
+
   const accounts = await provider.send('eth_requestAccounts', []);
-  const signer = provider.getSigner();
 
   const address = await signer.getAddress();
   const balance = await provider.getBalance(address);
@@ -195,11 +143,4 @@ export async function uploadFileToIPFS(output: string) {
 export function isMetamaskInstalledOnBrowser() {
   console.log('Checking if Metamask is installed on browser');
   return typeof window.ethereum !== 'undefined';
-}
-
-export async function getMetamaskAccounts() {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const accounts = await provider.send('eth_requestAccounts', []);
-
-  return accounts;
 }
