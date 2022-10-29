@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 import { uploadOutputToIPFS } from './libs/ipfs.js';
 
@@ -8,12 +10,18 @@ dotenv.config();
 const app = express();
 const PORT = 3001;
 
+app.use(cors());
+app.use(bodyParser.json());
+
 app.get('/', (req, res) => {
   res.send('Hello World!!!!');
 });
 
 app.post('/upload-output-to-ipfs', async (req, res) => {
-  const result = await uploadOutputToIPFS('my output');
+  console.log(req.body);
+  console.log(Object.keys(req));
+  // const result = await uploadOutputToIPFS('my output');
+  const result = 'pies';
   res.send(JSON.stringify(result));
 });
 app.listen(PORT, () => {
