@@ -78,7 +78,6 @@ contract Journal {
         );
     }
 
-    // TODO find a way to not return unpublished outputs, but without throwing an error
     function getOutputByFileNumber(uint256 _outputNumber)
         public
         view
@@ -92,25 +91,16 @@ contract Journal {
         )
     {
         Output memory output = outputsByIdNumber[_outputNumber];
+        // TODO find a way to not return unpublished outputs, but without throwing an error
 
-        // HERE // outputIdsByReviewerAddress(msg.sender)
-
-        if (
-            output.isPublished == true ||
-            output.uploader == msg.sender ||
-            isReviewer(msg.sender, _outputNumber)
-        ) {
-            return (
-                output.outputIdNumber,
-                output.outputPath,
-                output.outputHash,
-                output.isPublished,
-                output.uploader,
-                output.reviewers
-            );
-        } else {
-            return (0, '', '', false, payable(address(0)), new address[](0));
-        }
+        return (
+            output.outputIdNumber,
+            output.outputPath,
+            output.outputHash,
+            output.isPublished,
+            output.uploader,
+            output.reviewers
+        );
     }
 
     // TODO find a way to not return unpublished outputs, but without throwing an error
@@ -144,21 +134,6 @@ contract Journal {
     ) internal {
         for (uint256 i = 0; i < _reviewers.length; i++) {
             outputIdsByReviewerAddress[_reviewers[i]].push(_outputId);
-
-            // TODO debugging only - delete later
-
-            // uint256[] memory outputIds = outputIdsByReviewerAddress[
-            //     _reviewers[i]
-            // ];
-
-            // if (outputIds.length > 1) {
-            //     uint256 outputId0 = outputIds[0];
-            //     uint256 outputId1 = outputIds[1];
-
-            //     // console.log('hi', outputId0, outputId1);
-            // }
-
-            // end debug
         }
     }
 
