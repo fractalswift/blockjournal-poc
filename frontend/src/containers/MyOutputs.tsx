@@ -11,7 +11,6 @@ const MyOutputs = () => {
   useEffect(() => {
     const getOutputIds = async () => {
       const ids = await getOutputIdsByUploaderAddress();
-      console.log({ ids });
       setOutputIds(ids);
     };
 
@@ -32,7 +31,6 @@ const MyOutputs = () => {
     return (
       <div className={styles['outputs-list']}>
         {outputs.map((output: any) => {
-          console.log(output);
           return <OutputCard outputDetails={output} key={output.outputHash} />;
         })}
       </div>

@@ -4,52 +4,36 @@ import { useEffect, useState } from 'react';
 
 import styles from './MetamaskPanel.module.scss';
 
-// TODO check if connected to metamask. if so display a green unclickable button
-
 const MetamaskButton = () => {
-  const [isMetmaskInstalled, setIsMetmaskInstalled] = useState(false);
-  const [connectedAccounts, setConnectedAccounts] = useState([]);
+  const [isMetamaskInstalled, setIsMetamaskInstalled] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-
-  const handleClickConnect = async () => {
-    const userDetails = await connectToMetamask();
-    if (userDetails) {
-      setConnectedAccounts(userDetails.accounts);
-      return setIsConnected(true);
-    }
-
-    return setIsConnected(false);
-  };
+  const [connectionDetails, setConnectionDetails] = useState<any>({});
 
   useEffect(() => {
     if (!isMetamaskInstalledOnBrowser()) {
-      return setIsMetmaskInstalled(false);
+      return setIsMetamaskInstalled(false);
     }
-    setIsMetmaskInstalled(true);
+    setIsMetamaskInstalled(true);
   }, []);
 
   useEffect(() => {
-    const getConnectedMetamaskAccounts = async () => {
-      const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts'
-      });
-      return setConnectedAccounts(accounts);
+    const connectAndSetDetails = async () => {
+      const connectionDetails = await connectToMetamask();
+      return setConnectionDetails(connectionDetails);
     };
 
-    if (isMetmaskInstalled) {
-      getConnectedMetamaskAccounts();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (connectedAccounts.length > 0) {
+    console.log('Connecting to metamask...');
+    if (connectionDetails && connectionDetails.address) {
+      console.log('Metamask is connected');
       return setIsConnected(true);
     }
 
-    return setIsConnected(false);
-  }, [connectedAccounts]);
+    setIsConnected(false);
 
-  if (!isMetmaskInstalled) {
+    connectAndSetDetails();
+  }, [connectionDetails]);
+
+  if (!isMetamaskInstalled) {
     return (
       <div className={styles['container']}>
         <Button variant="contained" disabled>
@@ -66,8 +50,8 @@ const MetamaskButton = () => {
   if (!isConnected) {
     return (
       <div className={styles['container']}>
-        <Button variant="contained" onClick={handleClickConnect}>
-          Connect to Metamask
+        <Button variant="contained" color="error">
+          Awaiting metamask connection...
         </Button>
       </div>
     );
@@ -79,7 +63,7 @@ const MetamaskButton = () => {
       <Button variant="contained" color="primary">
         Connected
       </Button>
-      <p>Your address: {connectedAccounts[0]}</p>
+      <p>Your address: {connectionDetails.address}</p>
     </div>
   );
 };

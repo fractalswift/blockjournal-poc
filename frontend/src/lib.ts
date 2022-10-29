@@ -22,7 +22,6 @@ export async function uploadOutput(
 
     //signer needed for transaction that changes state
     const signer = provider.getSigner();
-    // console.log({ signer });
     const contract = new ethers.Contract(JOURNAL_CONTRACT_ADDRESS, ABI, signer);
 
     console.log('uploading: ', outputPath, outputHash, isPublished, [
@@ -51,7 +50,6 @@ function convertOutputDetailsArrayToObject(outputDetailsArray: any[]) {
   };
 }
 
-// TODO - instead of a simple count, should we be using something else?
 export async function getOutputDetailsByFileNumber(fileNumber: number) {
   if (typeof window.ethereum !== 'undefined') {
     //ethereum is usable get reference to the contract
@@ -64,11 +62,12 @@ export async function getOutputDetailsByFileNumber(fileNumber: number) {
 
     try {
       const output = await contract.getOutputByFileNumber(fileNumber);
-      console.log({ output });
 
       return convertOutputDetailsArrayToObject(output);
     } catch (e) {
-      console.log('Err: ', e);
+      throw new Error(
+        `Error getting output details for file number ${fileNumber}`
+      );
     }
   }
 }
@@ -94,7 +93,7 @@ export async function getOutputIdsByUploaderAddress() {
 
       return outputIds;
     } catch (e) {
-      console.log('Err: ', e);
+      throw new Error(`Error getting output ids for user ${userAddress}`);
     }
   }
 }
@@ -120,7 +119,7 @@ export async function getReviewRequestIdsByUserAddress() {
 
       return outputIds;
     } catch (e) {
-      console.log('Err: ', e);
+      throw new Error(`Error getting output ids for user ${userAddress}`);
     }
   }
 }
@@ -145,7 +144,6 @@ export async function getMultipleOutputsById(
         outputs.push(convertOutputDetailsArrayToObject(output));
       }
     } catch (e: any) {
-      console.log('Err: ', e);
       throw new Error(`Error getting outputs: ${e.message}`);
     }
 
@@ -175,6 +173,7 @@ export async function getTotalUploadedOutputsCount() {
       return fileCount;
     } catch (e) {
       console.log('Err: ', e);
+      throw new Error(`Error getting total uploaded outputs count`);
     }
   }
 }
@@ -188,7 +187,6 @@ export async function connectToMetamask() {
   const balance = await provider.getBalance(address);
   const formattedBalance = ethers.utils.formatEther(balance);
 
-  console.log({ address, balance, formattedBalance, accounts });
   return { address, balance, formattedBalance, accounts };
 }
 
