@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import OutputCard from '../components/OutputCard';
 import {
+  getMultipleOutputsById,
   getOutputDetailsByFileNumber,
   getReviewRequestIdsByUserAddress
 } from '../lib';
@@ -21,15 +22,12 @@ const MyReviews = () => {
 
   useEffect(() => {
     const getReviews = async () => {
-      for (let id of outputIds) {
-        const output = await getOutputDetailsByFileNumber(id.toString());
-        console.log('fetching for outputId', id.toString());
-        let currentOutputs = outputs;
-        currentOutputs.push(output);
-        console.log({ currentOutputs });
-        setOutputs(currentOutputs);
-      }
+      console.log('fetching for this many ids:', outputIds.length);
+      const outputs = await getMultipleOutputsById(outputIds);
+
+      setOutputs(outputs);
     };
+
     getReviews();
   }, [outputIds]);
 

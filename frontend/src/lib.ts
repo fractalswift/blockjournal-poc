@@ -94,7 +94,9 @@ export async function getReviewRequestIdsByUserAddress() {
   }
 }
 
-export async function getMultipleOutputsById(outputIds: string[]) {
+export async function getMultipleOutputsById(
+  outputIds: string[]
+): Promise<any[]> {
   if (typeof window.ethereum !== 'undefined') {
     //ethereum is usable get reference to the contract
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -104,19 +106,22 @@ export async function getMultipleOutputsById(outputIds: string[]) {
       provider
     );
 
-    try {
-      let outputs = [];
+    let outputs = [];
 
+    try {
       for (let i of outputIds) {
         const output = await contract.getOutputByFileNumber(i);
         outputs.push(convertOutputDetailsArrayToObject(output));
       }
-
-      return outputs;
     } catch (e) {
       console.log('Err: ', e);
+      throw new Error('Error getting outputs');
     }
+
+    return outputs;
   }
+
+  throw new Error('No ethereum');
 }
 
 export async function getTotalUploadedOutputsCount() {
