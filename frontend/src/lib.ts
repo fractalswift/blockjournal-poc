@@ -42,7 +42,8 @@ function convertOutputDetailsArrayToObject(outputDetailsArray: any[]) {
     outputPath: outputDetailsArray[1],
     outputHash: outputDetailsArray[2],
     isPublished: outputDetailsArray[3],
-    uploaderAddress: outputDetailsArray[4]
+    uploaderAddress: outputDetailsArray[4],
+    reviewers: outputDetailsArray[5]
   };
 }
 

@@ -25,6 +25,7 @@ contract Journal {
         string outputHash;
         bool isPublished;
         address payable uploader;
+        address[] reviewers;
     }
 
     event OutputUploaded(
@@ -57,12 +58,13 @@ contract Journal {
             _outputPath,
             _outputHash,
             _isPublished,
-            payable(msg.sender)
+            payable(msg.sender),
+            _reviewers
         );
 
         outputIdsByUploaderAddress[msg.sender].push(outputCount);
 
-        batchAddReviewers(_reviewers, outputCount);
+        batchAddToReviewersMapping(_reviewers, outputCount);
 
         // From the frontend application
         // we can listen the events emitted from
@@ -84,7 +86,8 @@ contract Journal {
             string memory,
             string memory,
             bool,
-            address payable
+            address payable,
+            address[] memory
         )
     {
         Output memory output = outputsByIdNumber[_outputNumber];
@@ -97,12 +100,15 @@ contract Journal {
                 isReviewer(msg.sender, _outputNumber),
             'Output is not published'
         );
+
+        address[] memory reviewers = getReviewers(_outputNumber);
         return (
             output.outputIdNumber,
             output.outputPath,
             output.outputHash,
             output.isPublished,
-            output.uploader
+            output.uploader,
+            reviewers
         );
     }
 
@@ -130,9 +136,10 @@ contract Journal {
         return outputIds;
     }
 
-    function batchAddReviewers(address[] memory _reviewers, uint256 _outputId)
-        internal
-    {
+    function batchAddToReviewersMapping(
+        address[] memory _reviewers,
+        uint256 _outputId
+    ) internal {
         for (uint256 i = 0; i < _reviewers.length; i++) {
             outputIdsByReviewerAddress[_reviewers[i]].push(_outputId);
 
@@ -194,6 +201,14 @@ contract Journal {
         outputsByIdNumber[_outputId].outputPath = _outputPath;
         outputsByIdNumber[_outputId].outputHash = _outputHash;
         outputsByIdNumber[_outputId].isPublished = _isPublished;
+    }
+
+    function getReviewers(uint256 _outputId)
+        public
+        view
+        returns (address[] memory)
+    {
+        return outputsByIdNumber[_outputId].reviewers;
     }
 
     // function deleteOutput

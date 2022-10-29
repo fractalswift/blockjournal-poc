@@ -196,6 +196,8 @@ describe('Journal', function () {
 
       const output = await journal.connect(reviewer).getOutputByFileNumber(1);
 
+      console.log({ output });
+
       expect(output).to.contain('fake-path-to-not-published-output');
     });
 

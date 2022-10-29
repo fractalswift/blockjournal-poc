@@ -13,6 +13,11 @@ const OutputCard = ({ outputDetails }: any) => {
       </p>
 
       <p>Output uploader address: {outputDetails.uploaderAddress}</p>
+
+      <p>
+        Output reviewers:{' '}
+        {outputDetails.reviewers.map((address: string) => address)}
+      </p>
     </div>
   );
 };
