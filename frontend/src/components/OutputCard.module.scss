@@ -2,3 +2,9 @@
   padding: 1em;
   border: 1px solid lightblue;
 }
+
+.reviewers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}

@@ -13,7 +13,8 @@ const MY_DEV_ADDRESS_2 = '0xdD2FD4581271e230360230F9337D5c0430Bf44C0';
 export async function uploadOutput(
   outputPath: string,
   outputHash: string,
-  isPublished: boolean
+  isPublished: boolean,
+  reviewers: string[]
 ) {
   if (typeof window.ethereum !== 'undefined') {
     //ethereum is usable, get reference to the contract
@@ -24,16 +25,14 @@ export async function uploadOutput(
     const signer = provider.getSigner();
     const contract = new ethers.Contract(JOURNAL_CONTRACT_ADDRESS, ABI, signer);
 
-    console.log('uploading: ', outputPath, outputHash, isPublished, [
-      MY_DEV_ADDRESS_2
-    ]);
+    console.log('uploading: ', outputPath, outputHash, isPublished, reviewers);
 
     // //preform transaction
     const transaction = await contract.uploadOutput(
       outputPath,
       outputHash,
       isPublished,
-      [MY_DEV_ADDRESS_2]
+      reviewers
     );
     await transaction.wait();
   }

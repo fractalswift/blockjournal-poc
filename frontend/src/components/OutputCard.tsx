@@ -14,10 +14,13 @@ const OutputCard = ({ outputDetails }: any) => {
 
       <p>Output uploader address: {outputDetails.uploaderAddress}</p>
 
-      <p>
-        Output reviewers:{' '}
-        {outputDetails.reviewers.map((address: string) => address)}
-      </p>
+      <p>Output reviewers:</p>
+
+      <div className={styles['reviewers-list']}>
+        {outputDetails.reviewers.map((address: string) => {
+          return <span key={address}>{address}</span>;
+        })}
+      </div>
     </div>
   );
 };
