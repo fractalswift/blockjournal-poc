@@ -7,6 +7,8 @@ import { JOURNAL_CONTRACT_ADDRESS } from './contract-address';
 
 const ABI = Journal.abi;
 
+const MY_DEV_ADDRESS = '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199';
+
 export async function uploadOutput(
   outputPath: string,
   outputHash: string,
@@ -26,7 +28,7 @@ export async function uploadOutput(
       outputPath,
       outputHash,
       isPublished,
-      []
+      ['0xdD2FD4581271e230360230F9337D5c0430Bf44C0']
     );
     await transaction.wait();
     // this.fetchGreeting();
@@ -54,7 +56,6 @@ export async function getOutputDetailsByFileNumber(fileNumber: number) {
       provider
     );
 
-    //try to get the greeting in the contract
     try {
       const output = await contract.getOutputByFileNumber(fileNumber);
       console.log({ output });
@@ -80,17 +81,12 @@ export async function getReviewRequestIdsByUserAddress() {
 
     const userAddress = await signer.getAddress();
 
-    //try to get the greeting in the contract
     try {
       const outputIds = await contract.getOutputIdsByReviewerAddress(
         userAddress
       );
 
-      for (let i = 0; i < outputIds.length; i++) {
-        console.log({ outputIds });
-      }
-
-      // return convertOutputDetailsArrayToObject(output);
+      return outputIds;
     } catch (e) {
       console.log('Err: ', e);
     }

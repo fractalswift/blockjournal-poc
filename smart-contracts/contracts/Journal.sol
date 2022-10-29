@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 // Uncomment this line to use console.log
-// import "hardhat/console.sol";
+import 'hardhat/console.sol';
 
 contract Journal {
     // TODO make constuctor
@@ -135,6 +135,21 @@ contract Journal {
     {
         for (uint256 i = 0; i < _reviewers.length; i++) {
             outputIdsByReviewerAddress[_reviewers[i]].push(_outputId);
+
+            // debugging only - delete later
+
+            uint256[] memory outputIds = outputIdsByReviewerAddress[
+                _reviewers[i]
+            ];
+
+            if (outputIds.length > 1) {
+                uint256 outputId0 = outputIds[0];
+                uint256 outputId1 = outputIds[1];
+
+                console.log('hi', outputId0, outputId1);
+            }
+
+            // end debug
         }
     }
 

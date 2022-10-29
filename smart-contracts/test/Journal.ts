@@ -110,7 +110,7 @@ describe('Journal', function () {
     });
 
     it('Does not allow public reading of output if isPublished flag is not set to true', async function () {
-      const { owner, otherAccount, journal } = await loadFixture(
+      const { owner, otherAccount, account3, journal } = await loadFixture(
         deployJournalContract
       );
 
@@ -123,9 +123,9 @@ describe('Journal', function () {
           []
         );
 
-      await expect(journal.getOutputByFileNumber(1)).to.be.revertedWith(
-        'Output is not published'
-      );
+      await expect(
+        journal.connect(account3).getOutputByFileNumber(1)
+      ).to.be.revertedWith('Output is not published');
     });
 
     it('Should allow an uploader to read their own output even if the output is not published', async function () {
@@ -197,6 +197,38 @@ describe('Journal', function () {
       const output = await journal.connect(reviewer).getOutputByFileNumber(1);
 
       expect(output).to.contain('fake-path-to-not-published-output');
+    });
+
+    it('Should allow a reviewer to be added to multiple outputs ', async function () {
+      const { owner, otherAccount, account3, journal } = await loadFixture(
+        deployJournalContract
+      );
+
+      const reviewer = account3;
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output-1',
+          'sdjakfx102-293',
+          false,
+          [reviewer.address]
+        );
+
+      await journal
+        .connect(otherAccount)
+        .uploadOutput(
+          'fake-path-to-not-published-output-2',
+          'sdjakfx102-293',
+          false,
+          [reviewer.address]
+        );
+
+      const outputIds = await journal
+        .connect(reviewer)
+        .getOutputIdsByReviewerAddress(reviewer.address);
+
+      expect(outputIds.length).to.equal(2);
     });
   });
 

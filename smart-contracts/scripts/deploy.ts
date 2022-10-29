@@ -1,5 +1,33 @@
 import { ethers } from 'hardhat';
 import fs from 'fs';
+import { Journal } from '../typechain-types';
+
+const MY_DEV_ADDRESS = '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199';
+
+async function seedOutputs(journal: Journal) {
+  // create an output from owner address and add my address as a reviewer
+  await journal.uploadOutput(
+    'fake-path-to-not-published-output',
+    'sdjakfx102-293',
+    false,
+    [MY_DEV_ADDRESS]
+  );
+
+  await journal.uploadOutput(
+    'fake-path-to-published-output',
+    'sdjakfx102-294',
+    true,
+    [MY_DEV_ADDRESS]
+  );
+}
+
+async function confirmOutputsWereSeeded(journal: Journal) {
+  const output = await journal.getOutputByFileNumber(1);
+  console.log('output', output);
+
+  const outputIds = await journal.getOutputIdsByReviewerAddress(MY_DEV_ADDRESS);
+  console.log({ outputIds });
+}
 
 function copyAbiToFrontend() {
   fs.copyFile(
@@ -35,6 +63,11 @@ async function main() {
   copyAbiToFrontend();
 
   console.log('copied abi to frontend/src/abis/Journal.json');
+
+  await seedOutputs(journal);
+  console.log('seeded outputs');
+
+  await confirmOutputsWereSeeded(journal);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
