@@ -109,26 +109,6 @@ describe('Journal', function () {
       expect(output1).to.contain(true);
     });
 
-    // TODO
-    // it('Does not allow public reading of output if isPublished flag is not set to true', async function () {
-    //   const { owner, otherAccount, account3, journal } = await loadFixture(
-    //     deployJournalContract
-    //   );
-
-    //   await journal
-    //     .connect(otherAccount)
-    //     .uploadOutput(
-    //       'fake-path-to-not-published-output',
-    //       'sdjakfx102-293',
-    //       false,
-    //       []
-    //     );
-
-    //   const output = await journal.connect(account3).getOutputByFileNumber(1);
-
-    //   expect(output).to.contain('0x0000000000000000000000000000000000000000');
-    // });
-
     it('Should allow an uploader to read their own output even if the output is not published', async function () {
       const { owner, otherAccount, account3, journal } = await loadFixture(
         deployJournalContract
@@ -148,8 +128,6 @@ describe('Journal', function () {
       const output = await journal
         .connect(otherAccount)
         .getOutputByFileNumber(1);
-
-      console.log({ output });
 
       expect(output).to.contain('fake-path-to-not-published-output-1');
     });

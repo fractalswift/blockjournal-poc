@@ -36,17 +36,15 @@ contract Journal {
         address payable uploader
     );
 
-    // we upload the output details
-    // to the smart contract outputs
-    // mapping in order to persist
-    // the information.
+    // WRITE
+
     function uploadOutput(
         string memory _outputPath,
         string memory _outputHash,
         bool _isPublished,
         address[] memory _reviewers
     ) public {
-        // TODO probably some requirement for isPublished
+        // TODO probably some requirement or default for isPublished
         require(bytes(_outputPath).length > 0);
         require(bytes(_outputHash).length > 0);
         require(msg.sender != address(0));
@@ -66,9 +64,7 @@ contract Journal {
 
         batchAddToReviewersMapping(_reviewers, outputCount);
 
-        // From the frontend application
-        // we can listen the events emitted from
-        // the smart contract in order to update the UI.
+        // TODO - listen for this in frontend
         emit OutputUploaded(
             outputCount,
             _outputPath,
@@ -77,6 +73,8 @@ contract Journal {
             payable(msg.sender)
         );
     }
+
+    // READ
 
     function getOutputByFileNumber(uint256 _outputNumber)
         public
@@ -104,6 +102,7 @@ contract Journal {
     }
 
     // TODO find a way to not return unpublished outputs, but without throwing an error
+
     function getOutputIdsByUploaderAddress(address _uploaderAddress)
         public
         view
@@ -127,6 +126,8 @@ contract Journal {
 
         return outputIds;
     }
+
+    // UTILS
 
     function batchAddToReviewersMapping(
         address[] memory _reviewers,
