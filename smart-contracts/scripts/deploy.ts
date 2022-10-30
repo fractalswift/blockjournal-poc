@@ -7,14 +7,14 @@ const MY_DEV_ADDRESS = '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199';
 async function seedOutputs(journal: Journal) {
   // create an output from owner address and add my address as a reviewer
   await journal.uploadOutput(
-    'fake-path-to-not-published-output',
+    'QmdefnkMuNaAro8sT2i5rufFbJmfd621UFsaoTaaL1Goh9',
     'sdjakfx102-293',
     false,
     [MY_DEV_ADDRESS]
   );
 
   await journal.uploadOutput(
-    'fake-path-to-published-output',
+    'QmQcuMDrHDMubaXYCv1iKHndgQiQ2M4RDh7rSVixi9Yvqj',
     'sdjakfx102-294',
     true,
     [MY_DEV_ADDRESS]

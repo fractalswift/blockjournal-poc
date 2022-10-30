@@ -182,3 +182,28 @@ export function isMetamaskInstalledOnBrowser() {
   console.log('Checking if Metamask is installed on browser');
   return typeof window.ethereum !== 'undefined';
 }
+
+export async function getOutputFromIPFS(outputPath: string) {
+  console.log('Getting output from IPFS...', { outputPath });
+
+  let response: AxiosResponse;
+
+  try {
+    response = await axios.get(
+      `http://localhost:3001/download-from-ipfs?path=${outputPath}`,
+      {}
+    );
+  } catch (error: any) {
+    console.log(
+      `Error getting output from IPFS: ${error.message}, replacing with default string`
+    );
+
+    return { output: 'No output found on IPFS' };
+  }
+
+  if (response?.data?.output) {
+    return response.data.output;
+  }
+  console.log('Response received but did not have expected attributes');
+  return { output: 'No output found on IPFS' };
+}
