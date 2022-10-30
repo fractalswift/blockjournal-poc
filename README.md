@@ -43,3 +43,12 @@ It is quite common to get Metamask errors about "already in queue" or "Nonce to 
 - click Settings
 - click Advanced
 - scroll down to the big red RESET button and click it.
+
+### Tests:
+
+At the moment there are only tests for the smart contracts. To run these:
+
+- navigate to /smart-contracts
+- run
+
+        npx hardhat test
