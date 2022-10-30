@@ -1,5 +1,27 @@
 import { create } from 'ipfs-http-client';
 
+export async function uploadOutputToIPFS(outputContent) {
+  const client = getAuthorizedClient();
+
+  console.debug('sending output to ipfs');
+
+  const result = await client.add(outputContent);
+
+  return result;
+}
+
+export async function getOutputFromIPFS(path) {
+  const client = getAuthorizedClient();
+
+  console.debug('getting output from ipfs');
+
+  const response = await client.cat(path);
+
+  const result = generateFromIPFSresponse(response);
+
+  return result;
+}
+
 function getAuthorizedClient() {
   console.debug('instantiating infura ipfs client');
 
@@ -19,16 +41,12 @@ function getAuthorizedClient() {
   });
 }
 
-function getIPFSLink(path) {
-  return `https://ipfs.infura.io/ipfs/${path}`;
-}
-
-export async function uploadOutputToIPFS(outputContent) {
-  const client = getAuthorizedClient();
-
-  console.debug('sending output to ipfs');
-
-  const result = await client.add(outputContent);
-
-  return result;
+// TODO test this with bigger files
+async function generateFromIPFSresponse(ipfsResult) {
+  let str = '';
+  for await (const val of ipfsResult) {
+    str = str + val;
+  }
+  const raw = Buffer.from(str).toString('utf8');
+  return raw;
 }
