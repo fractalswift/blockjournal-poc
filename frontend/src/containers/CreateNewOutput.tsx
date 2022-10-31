@@ -105,9 +105,6 @@ const NewOutputForm = () => {
         </div>
         <button type="submit">Submit</button>
       </form>
-      <button onClick={() => uploadFileToIPFS('my text')}>
-        Upload file to IPFS
-      </button>
     </div>
   );
 };
