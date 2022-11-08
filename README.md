@@ -1,6 +1,6 @@
 # blockjournal-poc
 
-Proof of concept for blockjournal. This project runs locally only.
+Proof of concept. This project runs locally only.
 
 ### Requirements:
 
