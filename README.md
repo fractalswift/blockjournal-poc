@@ -1,4 +1,4 @@
-# blockjournal-poc
+# poc
 
 Proof of concept. This project runs locally only.
 
