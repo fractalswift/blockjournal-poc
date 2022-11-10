@@ -11,7 +11,10 @@ Proof of concept. This project runs locally only.
 ### Setup:
 
 - run npm i in each folder
-- Add infura api key and secret to backend/.env
+- Create a file backend/.env and add infura api key and secret:
+
+                INFURA_API_KEY='xxxxx'
+                INFURA_API_SECRET='xxxxxx'
 
 #### To start, run these commands in their own terminals:
 
