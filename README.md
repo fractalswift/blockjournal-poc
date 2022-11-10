@@ -55,3 +55,9 @@ At the moment there are only tests for the smart contracts. To run these:
 - run
 
         npx hardhat test
+
+### About the demo:
+
+After following the instructions above, the demo app should start in your browser. It will have seeded two review invites for you - these represent two articles that have been created by another author who ahs invited you to review them. You can see them in the reviews tab.
+
+You can create a new research output in the Create New Output Tab. After signing with metamask, you should then be able to search for it by ID in the Read Public Outputs tab or see it listed in My Outputs. Since the 2 seeded outputs exist, the ID for the one you just created is 3.
